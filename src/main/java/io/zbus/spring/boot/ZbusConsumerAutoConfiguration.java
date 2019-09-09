@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
+import org.zbus.broker.Broker;
+import org.zbus.broker.ZbusBroker;
+import org.zbus.mq.Consumer;
+import org.zbus.net.http.Message.MessageHandler;
 
 import io.zbus.client.exception.MQClientException;
-import io.zbus.mq.Broker;
-import io.zbus.mq.Consumer;
 import io.zbus.mq.ConsumerConfig;
-import io.zbus.mq.MessageHandler;
 import io.zbus.spring.boot.config.SubscriptionProvider;
 import io.zbus.spring.boot.exception.ZbusException;
 import io.zbus.spring.boot.hooks.ZbusConsumerShutdownHook;
@@ -54,7 +54,7 @@ public class ZbusConsumerAutoConfiguration  {
 			 */
 			
 			
-			Broker broker = new Broker("localhost:15555");    
+			Broker broker = new ZbusBroker("localhost:15555");    
 			
 			ConsumerConfig config = new ConsumerConfig(broker);
 			
