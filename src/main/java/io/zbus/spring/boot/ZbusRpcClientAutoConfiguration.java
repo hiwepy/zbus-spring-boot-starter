@@ -22,7 +22,7 @@ import io.zbus.rpc.bootstrap.mq.ServiceBootstrap;
  * 
  * @className	： ZbusRpcClientAutoConfiguration
  * @description	： RPC客户端
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
  * @date		： 2018年1月28日 下午9:58:25
  * @version 	V1.0
  */
@@ -51,7 +51,7 @@ public class ZbusRpcClientAutoConfiguration  implements ApplicationContextAware 
 	/**
 	 * 
 	 * @description	： //可以通过该RpcInvoker调用底层同步、异步各种API能力
-	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
 	 * @date 		：2018年1月28日 下午10:02:11
 	 * @param b
 	 * @return

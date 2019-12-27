@@ -28,7 +28,7 @@ import org.springframework.util.ObjectUtils;
  * 
  * @className	： ZbusMqServiceAutoConfiguration
  * @description	： RPC服务端
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
  * @date		： 2018年1月28日 下午9:58:25
  * @version 	V1.0
  */

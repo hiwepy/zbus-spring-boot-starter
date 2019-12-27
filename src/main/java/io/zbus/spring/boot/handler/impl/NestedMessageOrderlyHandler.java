@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, vindell (https://github.com/vindell).
+ * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,7 +28,7 @@ import io.zbus.spring.boot.handler.ZbusMessageHandler;
  * 
  * @className	： NestedMessageOrderlyHandler
  * @description	： 嵌套的顺序消息处理器：解决统一消息交由多个处理实现处理问题
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
  * @date		： 2017年11月13日 上午10:35:10
  * @version 	V1.0
  */
