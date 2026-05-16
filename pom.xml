@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	
-	<groupId>com.github.hiwepy</groupId>
+	<groupId>io.github.hiwepy</groupId>
 	<artifactId>zbus-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For ZBus</description>
 	<version>1.0.0-SNAPSHOT</version>
@@ -432,7 +432,7 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>com.github.hiwepy</groupId>
+		    <groupId>io.github.hiwepy</groupId>
 			<artifactId>disruptor-spring-boot-starter</artifactId>
 			<version>1.0.3-SNAPSHOT</version>
 		    <optional>true</optional>
