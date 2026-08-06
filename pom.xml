@@ -424,6 +424,8 @@
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
          <zbus.version>1.0.0-b1</zbus.version>
+                <disruptor-spring-boot-starter.version>1.0.x.20260630-SNAPSHOT</disruptor-spring-boot-starter.version>
+                <zbus.version>7.2.2</zbus.version>
     </properties>
 
     <dependencies>
@@ -491,7 +493,7 @@
         <dependency>
             <groupId>io.github.hiwepy</groupId>
             <artifactId>disruptor-spring-boot-starter</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>${disruptor-spring-boot-starter.version}</version>
             <optional>true</optional>
         </dependency>
         
@@ -505,9 +507,26 @@
         <dependency>
             <groupId>org.zbus</groupId>
             <artifactId>zbus</artifactId>
-            <version>7.2.2</version>
+            <version>${zbus.version}</version>
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.hiwepy</groupId>
+                <artifactId>disruptor-spring-boot-starter</artifactId>
+                <version>${disruptor-spring-boot-starter.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.zbus</groupId>
+                <artifactId>zbus</artifactId>
+                <version>${zbus.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
 </project>
