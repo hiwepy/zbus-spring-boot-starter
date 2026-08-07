@@ -12,7 +12,7 @@
     <groupId>io.github.easy4j</groupId>
     <artifactId>zbus-spring-boot-starter</artifactId>
     <description>Spring Boot Starter For ZBus</description>
-    <version>2.3.x.20260527-SNAPSHOT</version>
+    <version>2.3.x.20260630-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>https://github.com/easy-4-java/${project.artifactId}</url>
     <packaging>jar</packaging>
@@ -411,6 +411,7 @@
     </profiles>
 
     <properties>
+        <java.version>1.8</java.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -426,7 +427,7 @@
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
          <zbus.version>1.0.0-b1</zbus.version>
                 <commons-io.version>2.22.0</commons-io.version>
-                <disruptor-spring-boot-starter.version>1.0.x.20260630-SNAPSHOT</disruptor-spring-boot-starter.version>
+                <disruptor-spring-boot-starter.version>2.3.x.20260630-SNAPSHOT</disruptor-spring-boot-starter.version>
                 <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
                 <junit.version>4.13.2</junit.version>
                 <slf4j.version>2.0.18</slf4j.version>
