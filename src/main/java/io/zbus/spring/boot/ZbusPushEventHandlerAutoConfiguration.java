@@ -112,7 +112,7 @@ public class ZbusPushEventHandlerAutoConfiguration implements ApplicationContext
 	/**
 	 * 
 	 * @description	： 创建ChainManager
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
+	 * @author [@Loong Wan](https://github.com/loong10k)
 	 * @date 		：2017年11月14日 下午4:47:03
 	 * @param eventHandlers
 	 * @return
