@@ -33,6 +33,14 @@ import io.zbus.spring.boot.handler.chain.def.PathMatchingHandlerChainResolver;
 import io.zbus.spring.boot.handler.impl.ZbusEventMessageHandler;
 import io.zbus.spring.boot.util.StringUtils;
 
+/**
+ * Spring Boot auto-configuration that discovers {@link EventHandler} beans,
+ * indexes them by the {@link ZbusRule} annotation metadata and builds the
+ * handler chain used by the Zbus consumer.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Configuration
 @ConditionalOnClass({ Consumer.class })
 @ConditionalOnProperty(prefix = ZbusConsumerProperties.PREFIX, value = "enabled", havingValue = "true")
@@ -42,14 +50,15 @@ public class ZbusPushEventHandlerAutoConfiguration implements ApplicationContext
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusPushEventHandlerAutoConfiguration.class);
 	private ApplicationContext applicationContext;
-	
+
 	/**
-	 * 处理器链定义
+	 * Handler chain definitions.
 	 */
 	private Map<String, String> handlerChainDefinitionMap = new HashMap<String, String>();
-	
+
 	/**
-	 * 处理器定义
+	 * Collects every {@link EventHandler} bean (except the built-in entry-point)
+	 * into a registry keyed by bean name.
 	 */
 	@Bean("zbusEventHandlers")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -63,17 +72,17 @@ public class ZbusPushEventHandlerAutoConfiguration implements ApplicationContext
 			while (ite.hasNext()) {
 				Entry<String, EventHandler> entry = ite.next();
 				if ( entry.getValue() instanceof ZbusEventMessageHandler) {
-					//跳过入口实现类
+					// Skip the built-in entry-point handler implementation.
 					continue;
 				}
 				ZbusRule annotationType = getApplicationContext().findAnnotationOnBean(entry.getKey(), ZbusRule.class);
 				if(annotationType == null) {
-					// 注解为空，则打印错误信息
+					// No annotation: log an error.
 					LOG.error("Not Found AnnotationType {0} on Bean {1} Whith Name {2}", ZbusRule.class, entry.getValue().getClass(), entry.getKey());
 				} else {
 					handlerChainDefinitionMap.put(annotationType.value(), entry.getKey());
 				}
-				
+
 				rocketmqEventHandlers.put(entry.getKey(), entry.getValue());
 			}
 		}
@@ -110,12 +119,11 @@ public class ZbusPushEventHandlerAutoConfiguration implements ApplicationContext
     }
 	
 	/**
-	 * 
-	 * @description	： 创建ChainManager
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
-	 * @date 		：2017年11月14日 下午4:47:03
-	 * @param eventHandlers
-	 * @return
+	 * Builds the {@link HandlerChainManager} from the registered handlers and
+	 * the chain definitions.
+	 *
+	 * @param eventHandlers the registered event handlers
+	 * @return the configured handler-chain manager
 	 */
 	protected HandlerChainManager<ZbusEvent> createHandlerChainManager(
 			Map<String, EventHandler<ZbusEvent>> eventHandlers) {
@@ -141,7 +149,7 @@ public class ZbusPushEventHandlerAutoConfiguration implements ApplicationContext
 				manager.createChain(rule, chainDefinition);
 			}
 		}
-		
+
 		return manager;
 	}
 	
