@@ -19,12 +19,15 @@ import io.zbus.rpc.bootstrap.http.SpringClientBootstrap;
 import io.zbus.rpc.bootstrap.mq.ServiceBootstrap;
 
 /**
- * 
- * @className	： ZbusRpcClientAutoConfiguration
- * @description	： RPC客户端
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
- * @date		： 2018年1月28日 下午9:58:25
- * @version 	V1.0
+ * Spring Boot auto-configuration for the Zbus RPC client.
+ * <p>
+ * Activated when {@code spring.zbus.consume-actively.enabled=true}. Registers a
+ * {@link SpringClientBootstrap} and the resulting {@link RpcInvoker} used to
+ * invoke remote services synchronously or asynchronously.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnClass({ ServiceBootstrap.class })
@@ -35,32 +38,34 @@ public class ZbusRpcClientAutoConfiguration  implements ApplicationContextAware 
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusRpcClientAutoConfiguration.class);
 	private ApplicationContext applicationContext;
-	
+
 	/**
-	 * @throws Exception 
+	 * Creates and starts the Zbus RPC client bootstrap.
+	 *
+	 * @return the started client bootstrap
+	 * @throws Exception if the bootstrap fails to start
 	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public SpringClientBootstrap clientBootstrap() throws Exception {
-		SpringClientBootstrap b = new SpringClientBootstrap(); 
+		SpringClientBootstrap b = new SpringClientBootstrap();
 		b.serviceAddress("localhost:15555")
-			.serviceToken("myrpc_service"); 
+			.serviceToken("myrpc_service");
 		return b;
 	}
-	
+
 	/**
-	 * 
-	 * @description	： //可以通过该RpcInvoker调用底层同步、异步各种API能力
-	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
-	 * @date 		：2018年1月28日 下午10:02:11
-	 * @param b
-	 * @return
-	 * @throws Exception
+	 * Creates the {@link RpcInvoker} that exposes the synchronous and
+	 * asynchronous RPC APIs.
+	 *
+	 * @param b the client bootstrap
+	 * @return the RPC invoker
+	 * @throws Exception if the invoker cannot be created
 	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public RpcInvoker rpcInvoker(ClientBootstrap b) throws Exception {
-		return b.invoker(); 
+		return b.invoker();
 	}
 	
 	@Bean
