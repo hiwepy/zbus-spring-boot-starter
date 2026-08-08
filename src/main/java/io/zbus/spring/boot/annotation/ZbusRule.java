@@ -7,15 +7,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Binds an {@link io.zbus.spring.boot.handler.EventHandler} to an Ant-style
+ * event dispatch rule of the form {@code topic/tag/keys}, e.g.
+ * {@code topic-a/tag-a/*}. The rule is used by the handler-chain resolver to
+ * route incoming messages.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented	
-@Inherited		
+@Documented
+@Inherited
 public @interface ZbusRule {
-	
+
 	/**
-	 * Ant风格的事件分发规则表达式,格式为：topic/tag/keys，如：topic-a/tag-a/*
+	 * @return the Ant-style dispatch rule (e.g. {@code topic-a/tag-a/*})
 	 */
 	String value();
-	
+
 }

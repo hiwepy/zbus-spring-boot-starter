@@ -25,12 +25,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ObjectUtils;
 
 /**
- * 
- * @className	： ZbusMqServiceAutoConfiguration
- * @description	： RPC服务端
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
- * @date		： 2018年1月28日 下午9:58:25
- * @version 	V1.0
+ * Spring Boot auto-configuration for the Zbus RPC service.
+ * <p>
+ * Activated when {@code spring.zbus.consume-actively.enabled=true}. Registers
+ * the {@link ServiceBootstrap} that hosts the RPC service and binds it to the
+ * Zbus broker.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @Configuration
 @ConditionalOnClass({ ServiceBootstrap.class })
@@ -41,36 +44,39 @@ public class ZbusRpcServiceAutoConfiguration  implements ApplicationContextAware
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusRpcServiceAutoConfiguration.class);
 	private ApplicationContext applicationContext;
-	
+
 	/**
-	 * @throws Exception 
+	 * Creates and starts the Zbus RPC service bootstrap.
+	 *
+	 * @return the started service bootstrap
+	 * @throws Exception if the service fails to start
 	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public ServiceBootstrap ServiceBootstrap() throws Exception {
-		ServiceBootstrap bootstrap = new ServiceBootstrap();  
-		
-		
+		ServiceBootstrap bootstrap = new ServiceBootstrap();
+
+
 		bootstrap.serviceName("MyRpc")
 		.host("host")
 		.addModule(module, clazz)
-		
+
 		.serviceAddress(addressList)
-		.port(15555)  //内部启动了zbus服务器，zbus与rpc服务之间不通过网络协议栈
-		 //.serviceAddress("localhost:15555")   //也可以通过网络链接到远程服务器上
-		 //.ssl("ssl/zbus.crt", "ssl/zbus.key") //启用SSL
-		 //.serviceToken("myrpc_service")       //启用Token权限验证
-		 .port(15555) 
+		.port(15555)  // Starts an embedded zbus server; zbus and the RPC service communicate in-process.
+		 //.serviceAddress("localhost:15555")   // Alternatively connect to a remote server over the network.
+		 //.ssl("ssl/zbus.crt", "ssl/zbus.key") // Enable SSL.
+		 //.serviceToken("myrpc_service")       // Enable token authentication.
+		 .port(15555)
 		 .autoDiscover(true)
 		 .start();
 		return bootstrap;
 	}
 
 	/**
-	 * 初始化消息消费者
-	 * 
-	 * @param consumer
-	 * @param properties
+	 * Configures the supplied consumer from the bound properties.
+	 *
+	 * @param consumer   the consumer to configure
+	 * @param properties the service properties
 	 */
 	public void configure(DefaultMQPullConsumer consumer, ZbusServiceProperties properties) {
 		
@@ -115,57 +121,61 @@ public class ZbusRpcServiceAutoConfiguration  implements ApplicationContextAware
 		}
 		
 		DefaultMQPullConsumer consumer = new DefaultMQPullConsumer(properties.getConsumerGroup());
-		
-		// 初始化参数
+
+		// Initialise consumer parameters.
 		this.configure(consumer, properties);
-					
+
 		consumer.setAllocateMessageQueueStrategy(allocateMessageQueueStrategy);
-		
-		// 查找Spring上下文中注册的MessageQueueListener接口实现
+
+		// Look up MessageQueueListener beans registered in the Spring context.
 		Map<String, MessageQueueListener> beansOfType = getApplicationContext().getBeansOfType(MessageQueueListener.class);
 		if (!ObjectUtils.isEmpty(beansOfType)) {
 			Iterator<Entry<String, MessageQueueListener>> ite = beansOfType.entrySet().iterator();
 			while (ite.hasNext()) {
 				Entry<String, MessageQueueListener> entry = ite.next();
-				//查找该实现上的注解
+				// Resolve the @RocketmqPullTopic annotation on the bean.
 				RocketmqPullTopic annotationType = getApplicationContext().findAnnotationOnBean(entry.getKey(), RocketmqPullTopic.class);
 				if(annotationType == null) {
-					// 注解为空，则跳过该实现，并打印错误信息
+					// No annotation: skip and log an error.
 					LOG.error("Not Found AnnotationType {0} on Bean {1} Whith Name {2}", RocketmqPullTopic.class, entry.getValue().getClass(), entry.getKey());
 					continue;
 				}
 				consumer.registerMessageQueueListener(annotationType.value(), entry.getValue());
 			}
 		}
-		
+
 		/*
-		 * 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，
-		 * 然而此事件的监听程序还未初始化，从而造成消息的丢失
+		 * Delay the start by a few seconds so Spring event listeners finish
+		 * initialising; otherwise consuming a message and immediately
+		 * publishing a message-arrived event could lose the event because its
+		 * listener is not yet registered.
 		 */
 		Executors.newScheduledThreadPool(1).schedule(new Thread() {
 			public void run() {
 				try {
 
 					/*
-					 * Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
+					 * The consumer must be started once before use.
 					 */
 					consumer.start();
 
-					LOG.info("RocketMQ MQPullConsumer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
+					LOG.info("Zbus MQPullConsumer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
 							properties.getConsumerGroup(), properties.getNamesrvAddr(), properties.getInstanceName());
-					
+
 					/**
-					 * 应用退出时，要调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销自己
-					 * 注意：我们建议应用在JBOSS、Tomcat等容器的退出钩子里调用shutdown方法
+					 * On application exit call shutdown to release resources,
+					 * close network connections and unregister from the broker.
+					 * It is recommended to call shutdown from the JVM shutdown
+					 * hook (e.g. when running inside JBoss/Tomcat).
 					 */
 					Runtime.getRuntime().addShutdownHook(new MQPullConsumerShutdownHook(consumer));
 
 				} catch (Exception e) {
-					LOG.error(String.format("RocketMQ MQPushConsumer Start failure ：%s", e.getMessage(), e));
+					LOG.error(String.format("Zbus MQPullConsumer Start failure ：%s", e.getMessage(), e));
 				}
 			}
 		}, properties.getDelayStartSeconds(), TimeUnit.SECONDS);
-		
+
 		return consumer;
 	} 
 	
@@ -183,62 +193,66 @@ public class ZbusRpcServiceAutoConfiguration  implements ApplicationContextAware
 		MQPullConsumerScheduleService scheduleService = new MQPullConsumerScheduleService(properties.getConsumerGroup());
 
 		DefaultMQPullConsumer consumer = scheduleService.getDefaultMQPullConsumer();
-		// 初始化参数
+		// Initialise consumer parameters.
 		this.configure(consumer, properties);
-		
+
 		try {
 			scheduleService.setMessageModel(MessageModel.valueOf(properties.getMessageModel()));
 		} catch (Exception e) {
 			scheduleService.setMessageModel(MessageModel.CLUSTERING);
 		}
-		
+
 		scheduleService.setPullThreadNums(properties.getPullThreadNums());
-		
-		// 查找Spring上下文中注册的PullTaskCallback接口实现
+
+		// Look up PullTaskCallback beans registered in the Spring context.
 		Map<String, PullTaskCallback> beansOfType = getApplicationContext().getBeansOfType(PullTaskCallback.class);
 		if (!ObjectUtils.isEmpty(beansOfType)) {
 			Iterator<Entry<String, PullTaskCallback>> ite = beansOfType.entrySet().iterator();
 			while (ite.hasNext()) {
 				Entry<String, PullTaskCallback> entry = ite.next();
-				//查找该实现上的注解
+				// Resolve the @RocketmqPullTopic annotation on the bean.
 				RocketmqPullTopic annotationType = getApplicationContext().findAnnotationOnBean(entry.getKey(), RocketmqPullTopic.class);
 				if(annotationType == null) {
-					// 注解为空，则跳过该实现，并打印错误信息
+					// No annotation: skip and log an error.
 					LOG.error("Not Found AnnotationType {0} on Bean {1} Whith Name {2}", RocketmqPullTopic.class, entry.getValue().getClass(), entry.getKey());
 					continue;
 				}
 				scheduleService.registerPullTaskCallback(annotationType.value(), entry.getValue());
 			}
 		}
-		
+
 		/*
-		 * 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，
-		 * 然而此事件的监听程序还未初始化，从而造成消息的丢失
+		 * Delay the start by a few seconds so Spring event listeners finish
+		 * initialising; otherwise consuming a message and immediately
+		 * publishing a message-arrived event could lose the event because its
+		 * listener is not yet registered.
 		 */
 		Executors.newScheduledThreadPool(1).schedule(new Thread() {
 			public void run() {
 				try {
 
 					/*
-					 * Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
+					 * The schedule service must be started once before use.
 					 */
 					scheduleService.start();
 
-					LOG.info("RocketMQ MQPullConsumerScheduleService Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
+					LOG.info("Zbus MQPullConsumerScheduleService Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
 							properties.getConsumerGroup(), properties.getNamesrvAddr(), properties.getInstanceName());
-					
+
 					/**
-					 * 应用退出时，要调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销自己
-					 * 注意：我们建议应用在JBOSS、Tomcat等容器的退出钩子里调用shutdown方法
+					 * On application exit call shutdown to release resources,
+					 * close network connections and unregister from the broker.
+					 * It is recommended to call shutdown from the JVM shutdown
+					 * hook (e.g. when running inside JBoss/Tomcat).
 					 */
 					Runtime.getRuntime().addShutdownHook(new MQPullConsumerScheduleShutdownHook(scheduleService));
 
 				} catch (Exception e) {
-					LOG.error(String.format("RocketMQ MQPushConsumer Start failure ：%s", e.getMessage(), e));
+					LOG.error(String.format("Zbus MQPullConsumerScheduleService Start failure ：%s", e.getMessage(), e));
 				}
 			}
 		}, properties.getDelayStartSeconds(), TimeUnit.SECONDS);
-		
+
 		return scheduleService;
 	}
 	
