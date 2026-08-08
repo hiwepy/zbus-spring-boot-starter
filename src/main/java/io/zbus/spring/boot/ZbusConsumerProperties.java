@@ -21,6 +21,25 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+/**
+ * Configuration properties for the Zbus consumer.
+ * <p>
+ * Bound to the {@code spring.zbus.consume.*} namespace. Controls consumer
+ * group, message model, subscription map, thread-pool sizing, retry behaviour
+ * and delayed start.
+ * </p>
+ *
+ * <h3>Configuration keys</h3>
+ * <ul>
+ *   <li>{@code spring.zbus.consume.enabled} — opt-in switch (default {@code false})</li>
+ *   <li>{@code spring.zbus.consume.consumer-group} — globally unique consumer group (required)</li>
+ *   <li>{@code spring.zbus.consume.subscription} — topic {@code ->} selector expression map</li>
+ *   <li>{@code spring.zbus.consume.delay-start-seconds} — delayed start in seconds (default {@code 10})</li>
+ * </ul>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ZbusConsumerProperties.PREFIX)
 public class ZbusConsumerProperties {
 	
@@ -55,10 +74,6 @@ public class ZbusConsumerProperties {
      * </p>
      *
      * This field defaults to clustering.
-     * 
-     * 消息模式
-     * 广播模式消费： BROADCASTING
-     * 集群模式消费： CLUSTERING
      */
     private String messageModel = "CLUSTERING";
     
@@ -144,7 +159,9 @@ public class ZbusConsumerProperties {
 	private int delayLevelWhenNextConsume = 0;
     
 	/**
-	 * 延迟启动时间，单位秒，主要是等待spring事件监听相关程序初始化完成，否则，会出现对RocketMQ的消息进行消费后立即发布消息到达的事件，然而此事件的监听程序还未初始化，从而造成消息的丢失
+	 * Delay before the consumer starts, in seconds. Lets Spring event listeners
+	 * finish initialising before messages are consumed, avoiding message loss
+	 * when a message-arrived event is published before its listener is ready.
 	 */
 	private int delayStartSeconds = 10;
 	
