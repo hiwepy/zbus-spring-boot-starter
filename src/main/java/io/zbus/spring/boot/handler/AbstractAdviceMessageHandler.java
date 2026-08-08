@@ -6,6 +6,14 @@ import org.slf4j.LoggerFactory;
 import io.zbus.spring.boot.event.ZbusEvent;
 import io.zbus.spring.boot.handler.chain.HandlerChain;
 
+/**
+ * {@link EventHandler} base that wraps execution in pre-handle / post-handle /
+ * after-completion advice, ensuring {@code afterCompletion} is always invoked.
+ *
+ * @param <T> the event type, bound to {@link ZbusEvent}
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class AbstractAdviceMessageHandler<T extends ZbusEvent> extends AbstractEnabledMessageHandler<T> {
 
 	protected final Logger LOG = LoggerFactory.getLogger(AbstractAdviceMessageHandler.class);

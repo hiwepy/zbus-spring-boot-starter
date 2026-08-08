@@ -8,18 +8,33 @@ import org.slf4j.LoggerFactory;
 import io.zbus.spring.boot.event.ZbusEvent;
 import io.zbus.spring.boot.handler.EventHandler;
 
+/**
+ * A {@link HandlerChain} that executes a list of {@link EventHandler}s in order
+ * and then delegates to an optional original (root) chain.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class ProxiedHandlerChain implements HandlerChain<ZbusEvent> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ProxiedHandlerChain.class);
-	
+
+	/** The original chain to delegate to after this chain's handlers. */
     private ProxiedHandlerChain originalChain;
+    /** The ordered handlers in this chain. */
     private List<EventHandler<ZbusEvent>> handlers;
+    /** Current position within the handler list. */
     private int currentPosition = 0;
 
+    /** Creates an empty root chain. */
     public ProxiedHandlerChain() {
         this.currentPosition = -1;
     }
-    
+
+    /**
+     * @param orig     the original chain to delegate to
+     * @param handlers the ordered handlers to execute
+     */
     public ProxiedHandlerChain(ProxiedHandlerChain orig, List<EventHandler<ZbusEvent>> handlers) {
         if (orig == null) {
             throw new NullPointerException("original HandlerChain cannot be null.");

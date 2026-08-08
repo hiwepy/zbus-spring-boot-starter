@@ -21,17 +21,35 @@ import org.springframework.context.ApplicationEvent;
 
 import io.zbus.mq.Message;
 
+/**
+ * Spring {@link ApplicationEvent} wrapping a received Zbus {@link Message},
+ * carrying its topic, tag, body and an Ant-style route expression
+ * ({@code /topic/tag/keys}) used by the handler-chain resolver.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @SuppressWarnings("serial")
 public class ZbusEvent extends ApplicationEvent {
-	
+
+	/** The raw Zbus message. */
 	private Message messageExt;
+	/** The message topic. */
 	private String topic;
+	/** The message tag. */
 	private String tag;
+	/** The raw message body bytes. */
 	private byte[] body;
-	
-	/** Route Expression*/
+
+	/** Ant-style route expression used to dispatch the event. */
 	private String routeExpression;
 
+	/**
+	 * Creates a new event wrapping the supplied message.
+	 *
+	 * @param msgExt the received Zbus message
+	 * @throws Exception if the route expression cannot be built
+	 */
 	public ZbusEvent(Message msgExt) throws Exception {
 		super(msgExt);
 		this.topic = msgExt.getTopic();
@@ -40,12 +58,21 @@ public class ZbusEvent extends ApplicationEvent {
 		this.messageExt = msgExt;
 		this.routeExpression = this.buildRouteExpression(msgExt);
 	}
-	
+
+	/**
+	 * Builds the {@code /topic/tag/keys} route expression for the message.
+	 *
+	 * @param msgExt the received message
+	 * @return the route expression string
+	 */
 	private String buildRouteExpression(Message msgExt) {
 		return new StringBuilder("/").append(msgExt.getTopic()).append("/").append(msgExt.getTag()).append("/")
 				.append(msgExt.getId()).toString();
 	}
 
+	/**
+	 * @return the message body decoded as UTF-8, or {@code null} on failure
+	 */
 	public String getMsgBody() {
 		try {
 			return new String(this.body, "UTF-8");
@@ -54,6 +81,10 @@ public class ZbusEvent extends ApplicationEvent {
 		}
 	}
 
+	/**
+	 * @param code the charset name to decode the body with
+	 * @return the message body decoded with the given charset, or {@code null} on failure
+	 */
 	public String getMsgBody(String code) {
 		try {
 			return new String(this.body, code);
@@ -62,40 +93,49 @@ public class ZbusEvent extends ApplicationEvent {
 		}
 	}
 
+	/** @return the raw Zbus message */
 	public Message getMessageExt() {
 		return messageExt;
 	}
 
+	/** @return the message topic */
 	public String getTopic() {
 		return topic;
 	}
 
+	/** @param topic the message topic */
 	public void setTopic(String topic) {
 		this.topic = topic;
 	}
 
+	/** @return the message tag */
 	public String getTag() {
 		return tag;
 	}
 
+	/** @param tag the message tag */
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
 
+	/** @return the raw message body bytes */
 	public byte[] getBody() {
 		return body;
 	}
 
+	/** @param body the raw message body bytes */
 	public void setBody(byte[] body) {
 		this.body = body;
 	}
 
+	/** @return the Ant-style route expression */
 	public String getRouteExpression() {
 		return routeExpression;
 	}
 
+	/** @param routeExpression the Ant-style route expression */
 	public void setRouteExpression(String routeExpression) {
 		this.routeExpression = routeExpression;
 	}
-	
+
 }

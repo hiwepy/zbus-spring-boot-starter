@@ -17,6 +17,14 @@ package io.zbus.spring.boot.handler;
 
 import io.zbus.mq.Message;
 
+/**
+ * No-op adapter for {@link ZbusMessageHandler} with default {@code preHandle}
+ * returning {@code true} and empty hook implementations.
+ * <p>Subclass and override the relevant methods to implement custom handling.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public abstract class ZbusMessageHandlerAdapter implements ZbusMessageHandler {
 
 	/**

@@ -29,6 +29,20 @@ import io.zbus.spring.boot.config.SubscriptionProvider;
 import io.zbus.spring.boot.exception.ZbusException;
 import io.zbus.spring.boot.hooks.ZbusConsumerShutdownHook;
 
+/**
+ * Spring Boot auto-configuration for the Zbus <strong>consumer</strong>.
+ * <p>
+ * Activated when {@code spring.zbus.consume.enabled=true}. Registers a Zbus
+ * {@link Consumer}, declares the topics discovered via a
+ * {@link SubscriptionProvider} or the {@code subscription} property map, binds
+ * the supplied {@link MessageHandler} and exposes a
+ * {@link ZbusConsumerTemplate}. The consumer is started after a configurable
+ * delay so that Spring event listeners are ready before messages arrive.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Configuration
 @ConditionalOnClass({ Consumer.class })
 @ConditionalOnProperty(prefix = ZbusConsumerProperties.PREFIX, value = "enabled", havingValue = "true")
@@ -37,9 +51,16 @@ import io.zbus.spring.boot.hooks.ZbusConsumerShutdownHook;
 public class ZbusConsumerAutoConfiguration  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusConsumerAutoConfiguration.class);
-	  
+
 	/**
-	 * 初始化Zbus消息监听方式的消费者
+	 * Creates and starts the Zbus {@link Consumer}, wiring subscriptions and the
+	 * message handler.
+	 *
+	 * @param properties  the consumer properties
+	 * @param subProvider optional subscription provider
+	 * @param messageHandler the message handler to receive events
+	 * @return the started Zbus consumer
+	 * @throws ZbusException if consumer initialisation fails
 	 */
 	@Bean
 	@ConditionalOnMissingBean
@@ -50,33 +71,34 @@ public class ZbusConsumerAutoConfiguration  {
 		try {
 
 			/*
-			 * 一个应用创建一个Consumer，由应用来维护此对象，可以设置为全局对象或者单例<br> 注意：ConsumerGroupName需要由应用来保证唯一
+			 * One application should create a single Consumer and maintain it
+			 * (e.g. as a singleton). The consumer group name must be unique.
 			 */
-			
-			
-			Broker broker = new ZbusBroker("localhost:15555");    
-			
+
+
+			Broker broker = new ZbusBroker("localhost:15555");
+
 			ConsumerConfig config = new ConsumerConfig(broker);
-			
-			//指定消息队列主题，同时可以指定分组通道
-			config.setTopic("MyTopic");  
+
+			// Specify the message-queue topic; a group channel may also be specified.
+			config.setTopic("MyTopic");
 			config.setMessageHandler(messageHandler);
 
 			Consumer consumer = new Consumer(config);
-			consumer.start(); 
-			
+			consumer.start();
+
 			consumer.declareGroup(topic, group)
 			consumer.declareGroup(topic, group)
-			
-			
-			
+
+
+
 			consumer.setAdminServerSelector(adminServerSelector);
 			consumer.setConsumeServerSelector(consumeServerSelector);
-			
-			
+
+
 
 			/*
-			 * 订阅指定topic下selectorExpress
+			 * Subscribe to the configured topics and selector expressions.
 			 */
 			Map<String /* topic */, String /* selectorExpress */> subscription = new HashMap<String, String>();
 			if(subProvider != null) {
@@ -88,54 +110,59 @@ public class ZbusConsumerAutoConfiguration  {
 			if(!CollectionUtils.isEmpty(properties.getSubscription()) ){
 				subscription.putAll(properties.getSubscription());
 			}
-			
+
 			if(!CollectionUtils.isEmpty(subscription) ){
-				
+
 				Iterator<Entry<String, String>> ite = subscription.entrySet().iterator();
 				while (ite.hasNext()) {
 					Entry<String, String> entry = ite.next();
-					/* 
-					 * entry.getKey() 	： topic名称 
-					 * entry.getValue() : 根据实际情况设置消息的selectorExpress 
+					/*
+					 * entry.getKey()   : topic name
+					 * entry.getValue() : selector expression for the topic
 					 */
 					String topic = entry.getKey();
 					String selectorExpress = entry.getValue();
-			           
+
 					consumer.declareTopic(topic);
-					
+
 				}
-				
+
 			}
 
 			/*
-			 * 注册消费监听
+			 * Register the consume listener.
 			 */
 			consumer.setMessageHandler(messageHandler);
-			
+
 			/*
-			 * 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，
-			 * 然而此事件的监听程序还未初始化，从而造成消息的丢失
+			 * Delay the start by a few seconds so Spring event listeners finish
+			 * initialising; otherwise consuming a message and immediately
+			 * publishing a message-arrived event could lose the event because
+			 * its listener is not yet registered.
 			 */
 			Executors.newScheduledThreadPool(1).schedule(new Thread() {
 				public void run() {
 					try {
 
 						/*
-						 * Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
+						 * The consumer must be started once before use.
 						 */
 						consumer.start();
 
 						LOG.info("Zbus Consumer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
 								properties.getConsumerGroup(), properties.getNamesrvAddr(), properties.getInstanceName());
-						
+
 						/**
-						 * 应用退出时，要调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销自己
-						 * 注意：我们建议应用在JBOSS、Tomcat等容器的退出钩子里调用shutdown方法
+						 * On application exit call shutdown to release
+						 * resources, close network connections and unregister
+						 * from the broker. It is recommended to call shutdown
+						 * from the JVM shutdown hook (e.g. when running inside
+						 * JBoss/Tomcat).
 						 */
 						Runtime.getRuntime().addShutdownHook(new ZbusConsumerShutdownHook(consumer));
 
 					} catch (Exception e) {
-						LOG.error(String.format("RocketMQ MQPushConsumer Start failure ：%s", e.getMessage(), e));
+						LOG.error(String.format("Zbus Consumer Start failure ：%s", e.getMessage(), e));
 					}
 				}
 			}, properties.getDelayStartSeconds(), TimeUnit.SECONDS);
@@ -146,7 +173,12 @@ public class ZbusConsumerAutoConfiguration  {
 			throw new ZbusException(e);
 		}
 	}
-	
+
+	/**
+	 * @param consumer the Zbus consumer
+	 * @return a {@link ZbusConsumerTemplate} wrapping the consumer
+	 * @throws MQClientException never thrown directly
+	 */
 	@Bean
 	public ZbusConsumerTemplate rocketmqConsumerTemplate(Consumer consumer) throws MQClientException {
 		return new ZbusConsumerTemplate(consumer);

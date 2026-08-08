@@ -23,67 +23,77 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * Default Zbus {@link MessageHandler} that collects every
+ * {@link ZbusMessageHandler} bean (except nested implementations), wraps them
+ * in a {@link NestedMessageOrderlyHandler} and invokes the
+ * pre-handle / handle / post-handle / after-completion lifecycle with retry
+ * support.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class DefaultMessageHandler implements MessageHandler, ApplicationContextAware, InitializingBean {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultMessageHandler.class);
-	
+
 	@Autowired
 	private ZbusConsumerProperties properties;
 	/**
-	 * 真正处理消息的实现对象
+	 * The actual handler implementation that processes messages.
 	 */
 	private ZbusMessageHandler messageHandler;
 	private ApplicationContext applicationContext;
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		
+
 		List<ZbusMessageHandler> handlers = new ArrayList<ZbusMessageHandler>();
-		
-		// 查找Spring上下文中注册的MessageOrderlyHandler接口实现
+
+		// Scan the Spring context for ZbusMessageHandler beans.
 		Map<String, ZbusMessageHandler> beansOfType = getApplicationContext().getBeansOfType(ZbusMessageHandler.class);
 		if (!ObjectUtils.isEmpty(beansOfType)) {
 			Iterator<Entry<String, ZbusMessageHandler>> ite = beansOfType.entrySet().iterator();
 			while (ite.hasNext()) {
 				Entry<String, ZbusMessageHandler> entry = ite.next();
 				if (entry.getValue() instanceof NestedMessageOrderlyHandler ) {
-					//跳过其他嵌套实现
+					// Skip other nested implementations.
 					continue;
 				}
 				handlers.add(entry.getValue());
 			}
 		}
-		
+
 		messageHandler = new NestedMessageOrderlyHandler(handlers);
-		
+
 	}
-	
+
 	@Override
 	public void handle(Message msgExt, MqClient client) throws IOException {
-		// 消费消息内容
+		// Consume the message.
 		LOG.debug("Receive msg: {}", msgExt);
-		
-		// 重试次数
+
+		// Max retry count.
 		int retryTimes = properties.getRetryTimesWhenConsumeFailed();
-				
+
 		Exception exception = null;
-		
+
 		try {
 
 			boolean continueHandle = messageHandler.preHandle(msgExt);
 			if (LOG.isTraceEnabled()) {
 				LOG.trace("Invoked preHandle method.  Continuing Handle ?: [" + continueHandle + "]");
 			}
-			
+
 			if (continueHandle) {
-				
+
 				long now = System.currentTimeMillis();
 				messageHandler.handleMessage(msgExt);
 				long costTime = System.currentTimeMillis() - now;
                 LOG.info("Message （ID : {} ）Consumed.  cost: {} ms", msgExt.getId(), costTime);
-                
+
 			}
-			
+
 			messageHandler.postHandle(msgExt);
 			if (LOG.isTraceEnabled()) {
 				LOG.trace("Successfully invoked postHandle method");
@@ -91,18 +101,18 @@ public class DefaultMessageHandler implements MessageHandler, ApplicationContext
 
 		} catch (Exception e) {
 			exception = e;
-			
+
 			if (msgExt.getRetry().intValue() < retryTimes) {
-				// TODO 消息消费失败，进行日志记录
+				// Consume failed: log the error and increment retry count.
 				String error = e.getCause() == null ? e.getMessage() : e.getCause().getMessage();
 				LOG.debug(String.format("Consume Error : %s , Message （ID : %s ） Reconsume.", error, msgExt.getId()));
 				msgExt.setRetry(msgExt.getRetry().intValue() + 1);
 			}
-			
+
 		} finally {
 			cleanup(msgExt,  exception);
 		}
-			
+
 	}
 	
 	protected void cleanup(Message msgExt, Exception existing) {

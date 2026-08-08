@@ -13,14 +13,27 @@ import io.zbus.mq.Protocol.ConsumeGroupInfo;
 import io.zbus.mq.Protocol.TopicInfo;
 import io.zbus.mq.Topic;
 
+/**
+ * Helper template for the Zbus producer, exposing the underlying
+ * {@link Producer} together with convenience methods for declaring
+ * topics/groups and publishing messages.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class ZbusProducerTemplate {
 
+	/** The underlying Zbus producer. */
 	@Autowired
 	protected Producer producer;
 
+	/** Creates an empty template; the producer must be set via {@link #setProducer(Producer)}. */
 	public ZbusProducerTemplate() {
 	}
 
+	/**
+	 * @param producer the underlying Zbus producer
+	 */
 	public ZbusProducerTemplate(Producer producer) {
 		this.producer = producer;
 	}
@@ -76,14 +89,14 @@ public class ZbusProducerTemplate {
 			throws IOException, InterruptedException {
 
 		Message msg = new Message();
-		msg.setId(key); // key用于标识业务的唯一性
-		msg.setTopic(topic); // 设置消息主题
-		msg.setTag(tag); // 可以设置消息标签
-		
-		msg.setBody(body); // 设置消息体
+		msg.setId(key); // key: business unique identifier
+		msg.setTopic(topic); // message topic
+		msg.setTag(tag); // optional message tag
+
+		msg.setBody(body); // message body
 		msg.setJsonBody(body);
-		
-		// 其他默认参数
+
+		// Other default parameters
 		
 		// msg.setRetry(value)
 		// msg.setStatus(status)

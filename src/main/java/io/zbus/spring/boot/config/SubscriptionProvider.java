@@ -17,8 +17,19 @@ package io.zbus.spring.boot.config;
 
 import java.util.Map;
 
+/**
+ * Strategy for providing the topic-to-selector-expression subscription map used
+ * by the Zbus consumer when it subscribes to topics.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public interface SubscriptionProvider {
 
+	/**
+	 * @return a map of topic to selector expression describing the subscriptions
+	 *         to register
+	 */
 	Map<String /* topic */, String /* selectorExpress */> subscription();
-	
+
 }

@@ -18,12 +18,31 @@ package io.zbus.spring.boot;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for the Zbus producer.
+ * <p>
+ * Bound to the {@code spring.zbus.producer.*} namespace. Controls producer
+ * group, send timeout, retry behaviour, message-size limits and optional
+ * transactional producer settings.
+ * </p>
+ *
+ * <h3>Configuration keys</h3>
+ * <ul>
+ *   <li>{@code spring.zbus.producer.enabled} — opt-in switch (default {@code false})</li>
+ *   <li>{@code spring.zbus.producer.producer-group} — producer group (required)</li>
+ *   <li>{@code spring.zbus.producer.transaction} — whether to use a transactional producer (default {@code false})</li>
+ * </ul>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ZbusProducerProperties.PREFIX)
 public class ZbusProducerProperties{
-	
+
+	/** Configuration prefix used by Spring Boot to bind properties. */
 	public static final String PREFIX = "spring.zbus.producer";
-	
-	/** 是否启用 **/
+
+	/** Whether the producer auto-configuration is enabled. */
 	protected boolean enabled = false;
 	
 	/**
@@ -99,13 +118,13 @@ public class ZbusProducerProperties{
 	
 	private long[] notAvailableDuration;
 	
-	/** 是否启用事物 **/
+	/** Whether to enable transactional message production. */
 	private boolean transaction = false;
-	/** 事务回查最小并发数 **/
+	/** Minimum thread-pool size for transaction status back-checks. */
 	private int checkThreadPoolMinSize = 1;
-	/** 事务回查最大并发数 **/
+	/** Maximum thread-pool size for transaction status back-checks. */
 	private int checkThreadPoolMaxSize = 1;
-	/** 队列数 **/
+	/** Queue size for pending transaction back-check requests. */
 	private int checkRequestHoldMax = 2000;
 	
 	

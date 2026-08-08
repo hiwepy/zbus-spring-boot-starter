@@ -23,6 +23,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
+/**
+ * Spring Boot auto-configuration for the Zbus producer.
+ * <p>
+ * Activated when {@code spring.zbus.producer.enabled=true}. Registers a
+ * {@link DefaultMQProducer} (or a {@link TransactionMQProducer} when
+ * {@code transaction=true}), wires a JVM shutdown hook and exposes a
+ * {@link ZbusProducerTemplate}.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Configuration
 @ConditionalOnClass({ DefaultMQProducer.class })
 @ConditionalOnProperty(prefix = ZbusProducerProperties.PREFIX, value = "enabled", havingValue = "true")
@@ -31,14 +43,14 @@ import org.springframework.core.Ordered;
 public class ZbusProducerAutoConfiguration {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusProducerAutoConfiguration.class);
-	
-	 
+
+
 
 	/**
-	 * 初始化消息生产者
-	 * 
-	 * @param producer
-	 * @param properties
+	 * Configures the supplied producer from the bound properties.
+	 *
+	 * @param producer    the producer to configure
+	 * @param properties  the producer properties
 	 */
 	public void configure(DefaultMQProducer producer, ZbusProducerProperties properties) {
 		producer.setClientCallbackExecutorThreads(properties.getClientCallbackExecutorThreads());
@@ -67,7 +79,7 @@ public class ZbusProducerAutoConfiguration {
 	}
 
 	/**
-	 * 初始化向rocketmq发送普通消息的生产者
+	 * Creates the Zbus producer (transactional or plain) and starts it.
 	 */
 	@Bean
 	@ConditionalOnProperty(prefix = ZbusProducerProperties.PREFIX, value = "producerGroup")
@@ -84,62 +96,65 @@ public class ZbusProducerAutoConfiguration {
 			throw new ZbusException("instanceName is empty");
 		}
 		String trackerList, String token
-		//Broker是对zbus服务器的本地抽象，多地址支持HA
-		Broker broker = new Broker("localhost:15555"); 
-			  
+		// Broker: local abstraction of the zbus server, multi-address for HA.
+		Broker broker = new Broker("localhost:15555");
+
 		Producer p = new Producer(broker);
-		
-		
-		p.declareTopic("MyTopic");    //当确定队列不存在需创建
-			
-		
+
+
+		p.declareTopic("MyTopic");    // Declare the topic when it is known not to exist.
+
 
 		Message res = p.publish(msg);
-		System.out.println(res);   
-			
-		broker.close();	
-		
+		System.out.println(res);
+
+		broker.close();
+
 
 		/*
-		 * 一个应用创建一个Producer，由应用来维护此对象，可以设置为全局对象或者单例<br>
-		 * 注意：ProducerGroupName需要由应用来保证唯一<br>
-		 * ProducerGroup这个概念发送普通的消息时，作用不大，但是发送分布式事务消息时，比较关键，
-		 * 因为服务器会回查这个Group下的任意一个Producer
+		 * One application should create a single Producer and maintain it
+		 * (e.g. as a singleton). The producer group name must be unique.
+		 * The producer group matters little for plain messages but is
+		 * critical for distributed transaction messages because the server
+		 * back-checks any producer within the group.
 		 */
 
-		// 是否需要事物
+		// Whether a transactional producer is required.
 		if (properties.isTransaction()) {
 			try {
 				/*
-				 * 初始化向rocketmq发送事务消息的生产者
+				 * Initialise the transactional message producer.
 				 */
 				TransactionMQProducer producer = new TransactionMQProducer(properties.getProducerGroup());
 
-				// 初始化参数
+				// Initialise producer parameters.
 				this.configure(producer, properties);
 
-				// 事务回查最小并发数
+				// Minimum concurrency for transaction back-checks.
 				producer.setCheckThreadPoolMinSize(properties.getCheckThreadPoolMinSize());
-				// 事务回查最大并发数
+				// Maximum concurrency for transaction back-checks.
 				producer.setCheckThreadPoolMaxSize(properties.getCheckThreadPoolMaxSize());
-				// 队列数
+				// Queue size for pending back-check requests.
 				producer.setCheckRequestHoldMax(properties.getCheckRequestHoldMax());
-				// TODO 由于社区版本的服务器阉割调了消息回查的功能，所以这个地方没有意义
+				// Note: the community server build strips back-check support, so this has no effect there.
 				producer.setTransactionCheckListener(transactionCheckListener);
 
 				/*
-				 * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br> 注意：切记不可以在每次发送消息时，都调用start方法
+				 * The producer must be started once before use; do not call
+				 * start on every send.
 				 */
 				producer.start();
 
-				LOG.info("RocketMQ TransactionMQProducer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
+				LOG.info("Zbus TransactionMQProducer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
 						properties.getProducerGroup(), properties.getNamesrvAddr(), properties.getInstanceName());
 				/**
-				 * 应用退出时，要调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销自己
-				 * 注意：我们建议应用在JBOSS、Tomcat等容器的退出钩子里调用shutdown方法
+				 * On application exit call shutdown to release resources,
+				 * close network connections and unregister from the broker.
+				 * It is recommended to call shutdown from the JVM shutdown
+				 * hook (e.g. when running inside JBoss/Tomcat).
 				 */
 				Runtime.getRuntime().addShutdownHook(new ZbusProducerShutdownHook(producer));
-				
+
 				return producer;
 
 			} catch (Exception e) {
@@ -151,38 +166,46 @@ public class ZbusProducerAutoConfiguration {
 
 			try {
 
-				// 创建生产者对象
+				// Create the plain producer.
 				DefaultMQProducer producer = new DefaultMQProducer(properties.getProducerGroup());
 
-				// 初始化参数
+				// Initialise producer parameters.
 				this.configure(producer, properties);
 
 				/*
-				 * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br> 注意：切记不可以在每次发送消息时，都调用start方法
+				 * The producer must be started once before use; do not call
+				 * start on every send.
 				 */
 				producer.start();
 
-				LOG.info("RocketMQ MQProducer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
+				LOG.info("Zbus MQProducer Started ! groupName:[%s],namesrvAddr:[%s],instanceName:[%s].",
 						properties.getProducerGroup(), properties.getNamesrvAddr(), properties.getInstanceName());
 
 				/**
-				 * 应用退出时，要调用shutdown来清理资源，关闭网络连接，从RocketMQ服务器上注销自己
-				 * 注意：我们建议应用在JBOSS、Tomcat等容器的退出钩子里调用shutdown方法
+				 * On application exit call shutdown to release resources,
+				 * close network connections and unregister from the broker.
+				 * It is recommended to call shutdown from the JVM shutdown
+				 * hook (e.g. when running inside JBoss/Tomcat).
 				 */
 				Runtime.getRuntime().addShutdownHook(new ZbusProducerShutdownHook(producer));
 
 				return producer;
 			} catch (Exception e) {
-				LOG.error(String.format("RocketMQ MQProducer Start failure ：%s", e.getMessage(), e));
+				LOG.error(String.format("Zbus MQProducer Start failure ：%s", e.getMessage(), e));
 				throw new ZbusException(e);
 			}
 		}
 
 	}
- 
+
+	/**
+	 * @param producer the Zbus producer
+	 * @return a {@link ZbusProducerTemplate} wrapping the producer
+	 * @throws MQClientException never thrown directly
+	 */
 	@Bean
 	public ZbusProducerTemplate rocketmqProducerTemplate(DefaultMQProducer producer) throws MQClientException {
 		return new ZbusProducerTemplate(producer);
 	}
-	
+
 }

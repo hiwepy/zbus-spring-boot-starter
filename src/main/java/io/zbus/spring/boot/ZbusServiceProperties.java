@@ -22,18 +22,29 @@ import java.util.Set;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for the Zbus RPC service.
+ * <p>
+ * Bound to the {@code spring.zbus.consume-actively.*} namespace. Controls
+ * service name, connection count, runtime diagnostics and module registration.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ZbusServiceProperties.PREFIX)
 public class ZbusServiceProperties {
-	
+
 	/**
-     * ConsumeType.CONSUME_PASSIVELY : "PULL"
+     * Configuration prefix. {@code CONSUME_PASSIVELY} corresponds to the "PULL"
+     * consume type.
      */
 	public static final String PREFIX = "spring.zbus.consume-actively";
-	
-	/** 是否启用 **/
+
+	/** Whether the Zbus RPC auto-configuration is enabled. */
 	private boolean enabled = false;
-	
-	/** */
+
+	/** Logical service name registered with the Zbus broker. */
     private String serviceName;
 	
 	private int connectionCount;

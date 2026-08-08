@@ -17,6 +17,17 @@ package io.zbus.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Root configuration properties for the Zbus Spring Boot starter.
+ * <p>
+ * Bound to the {@code cas.*} namespace. Holds the common Zbus broker and
+ * CAS-style client options shared across the producer, consumer and RPC
+ * auto-configurations.
+ * </p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ZbusProperties.PREFIX)
 public class ZbusProperties {
 

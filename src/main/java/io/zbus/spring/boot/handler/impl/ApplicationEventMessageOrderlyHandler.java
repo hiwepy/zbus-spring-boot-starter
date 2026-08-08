@@ -9,19 +9,26 @@ import io.zbus.mq.Message;
 import io.zbus.spring.boot.event.ZbusEvent;
 import io.zbus.spring.boot.handler.ZbusMessageHandler;
 
+/**
+ * Message handler that publishes a {@link ZbusEvent} through the Spring
+ * {@link ApplicationEventPublisher}, allowing tag-specific listeners to receive it.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class ApplicationEventMessageOrderlyHandler implements ZbusMessageHandler, ApplicationEventPublisherAware {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ApplicationEventMessageOrderlyHandler.class);
 	private ApplicationEventPublisher eventPublisher;
-	
+
 	@Override
 	public boolean preHandle(Message msgExt) throws Exception {
 		return true;
 	}
-	
+
 	@Override
 	public void handleMessage(Message msgExt) throws Exception {
-		// 发布消息到达的事件，以便分发到每个tag的监听方法
+		// Publish a message-arrived event so tag-specific listeners can handle it.
 		getEventPublisher().publishEvent(new ZbusEvent(msgExt));
 	}
 	
