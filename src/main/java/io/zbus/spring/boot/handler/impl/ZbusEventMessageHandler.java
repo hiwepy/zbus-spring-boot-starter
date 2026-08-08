@@ -11,24 +11,35 @@ import io.zbus.spring.boot.handler.chain.HandlerChain;
 import io.zbus.spring.boot.handler.chain.HandlerChainResolver;
 import io.zbus.spring.boot.handler.chain.ProxiedHandlerChain;
 
+/**
+ * Entry-point handler for Zbus message consumption that wraps each received
+ * {@link Message} in a {@link ZbusEvent} and dispatches it through the
+ * configured {@link HandlerChain}.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 public class ZbusEventMessageHandler extends AbstractRouteableMessageHandler<ZbusEvent> implements ZbusMessageHandler {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ZbusEventMessageHandler.class);
-	
+
+	/**
+	 * @param filterChainResolver the chain resolver used to route events
+	 */
 	public ZbusEventMessageHandler(HandlerChainResolver<ZbusEvent> filterChainResolver) {
 		super(filterChainResolver);
 	}
-	
+
 	@Override
 	public boolean preHandle(Message msgExt) throws Exception {
 		return true;
 	}
-	
+
 	@Override
 	public void handleMessage(Message msgExt) throws Exception {
-		//构造原始链对象
+		// Build the original (root) chain.
 		HandlerChain<ZbusEvent>	originalChain = new ProxiedHandlerChain();
-		//执行事件处理链
+		// Execute the event handler chain.
 		this.doHandler(new ZbusEvent(msgExt), originalChain);
 	}
 
