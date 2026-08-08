@@ -22,12 +22,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Marks a bean (e.g. a {@code MessageQueueListener} or {@code PullTaskCallback})
+ * as bound to the given Zbus topic.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented	
-@Inherited		
+@Documented
+@Inherited
 public @interface RocketmqPullTopic {
-	
+
+	/**
+	 * @return the topic this bean subscribes to
+	 */
 	String value();
-	
+
 }

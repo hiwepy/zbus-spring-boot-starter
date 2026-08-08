@@ -25,12 +25,12 @@ import io.zbus.mq.Message;
 import io.zbus.spring.boot.handler.ZbusMessageHandler;
 
 /**
- * 
- * @className	： NestedMessageOrderlyHandler
- * @description	： 嵌套的顺序消息处理器：解决统一消息交由多个处理实现处理问题
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
- * @date		： 2017年11月13日 上午10:35:10
- * @version 	V1.0
+ * Composite {@link ZbusMessageHandler} that delegates each message to a list of
+ * nested handlers, allowing a single message to be processed by multiple
+ * implementations.
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class NestedMessageOrderlyHandler implements ZbusMessageHandler {
 
