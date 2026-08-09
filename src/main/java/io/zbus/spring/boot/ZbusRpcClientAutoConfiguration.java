@@ -20,11 +20,6 @@ import io.zbus.rpc.bootstrap.mq.ServiceBootstrap;
 
 /**
  * Spring Boot auto-configuration for the Zbus RPC client.
- * <p>
- * Activated when {@code spring.zbus.consume-actively.enabled=true}. Registers a
- * {@link SpringClientBootstrap} and the resulting {@link RpcInvoker} used to
- * invoke remote services synchronously or asynchronously.
- * </p>
  *
  * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
@@ -34,51 +29,32 @@ import io.zbus.rpc.bootstrap.mq.ServiceBootstrap;
 @ConditionalOnProperty(prefix = ZbusServiceProperties.PREFIX, value = "enabled", havingValue = "true")
 @AutoConfigureAfter(ZbusPushEventHandlerAutoConfiguration.class)
 @EnableConfigurationProperties({ ZbusServiceProperties.class })
-public class ZbusRpcClientAutoConfiguration  implements ApplicationContextAware {
+public class ZbusRpcClientAutoConfiguration implements ApplicationContextAware {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ZbusRpcClientAutoConfiguration.class);
-	private ApplicationContext applicationContext;
+    private static final Logger LOG = LoggerFactory.getLogger(ZbusRpcClientAutoConfiguration.class);
+    private ApplicationContext applicationContext;
 
-	/**
-	 * Creates and starts the Zbus RPC client bootstrap.
-	 *
-	 * @return the started client bootstrap
-	 * @throws Exception if the bootstrap fails to start
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	public SpringClientBootstrap clientBootstrap() throws Exception {
-		SpringClientBootstrap b = new SpringClientBootstrap();
-		b.serviceAddress("localhost:15555")
-			.serviceToken("myrpc_service");
-		return b;
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public SpringClientBootstrap clientBootstrap() throws Exception {
+        SpringClientBootstrap b = new SpringClientBootstrap();
+        b.serviceAddress("localhost:15555")
+            .serviceToken("myrpc_service");
+        return b;
+    }
 
-	/**
-	 * Creates the {@link RpcInvoker} that exposes the synchronous and
-	 * asynchronous RPC APIs.
-	 *
-	 * @param b the client bootstrap
-	 * @return the RPC invoker
-	 * @throws Exception if the invoker cannot be created
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	public RpcInvoker rpcInvoker(ClientBootstrap b) throws Exception {
-		return b.invoker();
-	}
-	
-	@Bean
-	public ZbusPullConsumerTemplate rocketmqConsumerTemplate(MQPullConsumer consumer) throws MQClientException {
-		return new ZbusPullConsumerTemplate(consumer);
-	}
-	
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public RpcInvoker rpcInvoker(ClientBootstrap b) throws Exception {
+        return b.invoker();
+    }
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 }

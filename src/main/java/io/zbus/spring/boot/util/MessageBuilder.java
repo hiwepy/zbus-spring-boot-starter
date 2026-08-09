@@ -6,13 +6,11 @@ import org.apache.commons.lang3.builder.Builder;
 import io.zbus.mq.Message;
 import io.zbus.spring.boot.exception.MessageBuildException;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * Fluent builder for constructing Zbus {@link Message} instances.
  * <p>
- * Topic, tag and keys are required; the body may be supplied as a String, a
- * serialisable Object (JSON-encoded) or a raw byte array.
+ * Topic, tag and keys are required; the body may be supplied as a String
+ * or a raw byte array.
  * </p>
  *
  * @author [@Loong Wan](https://github.com/loong10k)
@@ -20,109 +18,68 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class MessageBuilder implements Builder<Message> {
 
-	/** Message topic. */
-	private String topic;
-	/** Message tag. */
-	private String tag;
-	/** Message business keys (unique identifier, query keywords). */
-	private String keys;
-	/** Raw message body bytes. */
-	private byte[] body;
+    /** Message topic. */
+    private String topic;
+    /** Message tag. */
+    private String tag;
+    /** Message business keys (unique identifier, query keywords). */
+    private String keys;
+    /** Raw message body bytes. */
+    private byte[] body;
 
-	private Message msg = new Message();
+    /**
+     * @param topic the message topic (required)
+     * @param tag   the message tag (required)
+     * @param keys  business unique identifier / query keyword (required)
+     */
+    public MessageBuilder(String topic, String tag, String keys) {
+        this.topic = topic;
+        this.tag = tag;
+        this.keys = keys;
+    }
 
-	/**
-	 * @param topic the message topic
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder topic(String topic) {
-		this.topic = topic;
-		return this;
-	}
+    /**
+     * Sets the message body as a String.
+     *
+     * @param body the body content
+     * @return this builder
+     */
+    public MessageBuilder withBody(String body) {
+        this.body = body != null ? body.getBytes() : null;
+        return this;
+    }
 
-	/**
-	 * @param tag the message tag
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder tag(String tag) {
-		this.tag = tag;
-		return this;
-	}
+    /**
+     * Sets the message body as raw bytes.
+     *
+     * @param body the body bytes
+     * @return this builder
+     */
+    public MessageBuilder withBody(byte[] body) {
+        this.body = body;
+        return this;
+    }
 
-	/**
-	 * @param keys the message business keys
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder keys(String keys) {
-		this.keys = keys;
-		return this;
-	}
-
-	/**
-	 * Sets the body from the given String using the platform default charset.
-	 *
-	 * @param body the message body as a String
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder body(String body) {
-		this.body = body.getBytes();
-		return this;
-	}
-
-	/**
-	 * Sets the body by JSON-encoding the given object.
-	 *
-	 * @param body the message body as an object
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder body(Object body) {
-		this.body = JSONObject.toJSONString(body).getBytes();
-		return this;
-	}
-
-	/**
-	 * @param body the raw message body bytes
-	 * @return this builder for chaining
-	 */
-	public MessageBuilder body(byte[] body) {
-		this.body = body;
-		return this;
-	}
-
-	/**
-	 * Builds the {@link Message}, validating that topic, tag, keys and body
-	 * are all set.
-	 *
-	 * @return the constructed Zbus message
-	 * @throws MessageBuildException if any required field is missing
-	 */
-	@Override
-	public Message build() {
-
-		if (StringUtils.isEmpty(topic)) {
-			throw new MessageBuildException("topic is empty");
-		}
-		if (StringUtils.isEmpty(tag)) {
-			throw new MessageBuildException("tag is empty");
-		}
-		if (StringUtils.isEmpty(keys)) {
-			throw new MessageBuildException("keys is empty");
-		}
-		if ( null == body ) {
-			throw new MessageBuildException("body is null");
-		}
-		Message msg = new Message();
-		msg.setTopic(value)
-		msg.setBody(body)
-
-		msg.setTag(value)
-
-
-		return new Message(topic, // topic
-				tag, // tags
-				keys, // key: business unique identifier / query keyword, multiple keys separated by KEY_SEPARATOR
-				body  // body: binary byte array
-		);
-	}
+    @Override
+    public Message build() {
+        if (StringUtils.isEmpty(topic)) {
+            throw new MessageBuildException("topic is empty");
+        }
+        if (StringUtils.isEmpty(tag)) {
+            throw new MessageBuildException("tag is empty");
+        }
+        if (StringUtils.isEmpty(keys)) {
+            throw new MessageBuildException("keys is empty");
+        }
+        if (body == null) {
+            throw new MessageBuildException("body is null");
+        }
+        Message msg = new Message();
+        msg.setTopic(topic);
+        msg.setTag(tag);
+        msg.setId(keys);
+        msg.setBody(body);
+        return msg;
+    }
 
 }

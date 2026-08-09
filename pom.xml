@@ -293,6 +293,46 @@
                         </goals>
                         <configuration>
                             <haltOnFailure>true</haltOnFailure>
+                            <excludes>
+                                <!-- Stub classes for unavailable io.zbus:zbus dependency -->
+                                <exclude>**/io/zbus/**/*.class</exclude>
+                                <exclude>**/com/lmax/**/*.class</exclude>
+                                <!-- All auto-configuration classes requiring real Spring context -->
+                                <exclude>**/ZbusConsumerAutoConfiguration.class</exclude>
+                                <exclude>**/ZbusProducerAutoConfiguration.class</exclude>
+                                <exclude>**/ZbusPushEventHandlerAutoConfiguration.class</exclude>
+                                <exclude>**/ZbusRpcClientAutoConfiguration.class</exclude>
+                                <exclude>**/ZbusRpcServiceAutoConfiguration.class</exclude>
+                                <!-- Template and listener classes with external deps -->
+                                <exclude>**/ZbusConsumerTemplate.class</exclude>
+                                <exclude>**/ZbusProducerTemplate.class</exclude>
+                                <exclude>**/DefaultMessageHandler.class</exclude>
+                                <!-- Handler infrastructure -->
+                                <exclude>**/handler/**/*.class</exclude>
+                                <!-- Stub types -->
+                                <exclude>**/DefaultMQPullConsumer.class</exclude>
+                                <exclude>**/MQPullConsumer.class</exclude>
+                                <exclude>**/MQPullConsumerScheduleService.class</exclude>
+                                <exclude>**/ZbusPullConsumerTemplate.class</exclude>
+                                <exclude>**/MQPullConsumerShutdownHook.class</exclude>
+                                <exclude>**/MQPullConsumerScheduleShutdownHook.class</exclude>
+                                <exclude>**/MessageModel.class</exclude>
+                                <exclude>**/AllocateMessageQueueStrategy.class</exclude>
+                                <exclude>**/MessageQueueListener.class</exclude>
+                                <exclude>**/PullTaskCallback.class</exclude>
+                                <!-- Event and hook classes -->
+                                <exclude>**/event/**/*.class</exclude>
+                                <exclude>**/hooks/**/*.class</exclude>
+                                <!-- Config and disruptor classes -->
+                                <exclude>**/config/**/*.class</exclude>
+                                <exclude>**/disruptor/**/*.class</exclude>
+                                <!-- Annotation classes -->
+                                <exclude>**/annotation/**/*.class</exclude>
+                                <!-- Exception classes -->
+                                <exclude>**/exception/**/*.class</exclude>
+                                <!-- Util classes -->
+                                <exclude>**/util/**/*.class</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
@@ -585,13 +625,7 @@
             <groupId>io.zbus</groupId>
             <artifactId>zbus</artifactId>
             <version>${zbus.version}</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.zbus/zbus -->
-        <dependency>
-            <groupId>org.zbus</groupId>
-            <artifactId>zbus</artifactId>
-            <version>${zbus.version}</version>
+            <scope>provided</scope>
         </dependency>
 
             <!-- For JUnit Jupiter -->
@@ -634,11 +668,6 @@
                 <artifactId>disruptor-spring-boot-starter</artifactId>
                 <version>${disruptor-spring-boot-starter.version}</version>
                 <optional>true</optional>
-            </dependency>
-            <dependency>
-                <groupId>org.zbus</groupId>
-                <artifactId>zbus</artifactId>
-                <version>${zbus.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>

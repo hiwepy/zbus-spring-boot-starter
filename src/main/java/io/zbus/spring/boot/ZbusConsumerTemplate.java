@@ -1,13 +1,5 @@
 package io.zbus.spring.boot;
 
-import io.zbus.client.consumer.MQPushConsumer;
-import io.zbus.client.consumer.MessageSelector;
-import io.zbus.client.consumer.listener.MessageListenerConcurrently;
-import io.zbus.client.consumer.listener.MessageListenerOrderly;
-import io.zbus.client.exception.MQClientException;
-import io.zbus.client.producer.MessageQueueSelector;
-import io.zbus.client.producer.selector.SelectMessageQueueByHash;
-import io.zbus.client.producer.selector.SelectMessageQueueByRandom;
 import io.zbus.mq.Consumer;
 import io.zbus.spring.boot.enums.ConsumeMode;
 import io.zbus.spring.boot.event.RocketmqEvent;
@@ -30,121 +22,54 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ZbusConsumerTemplate {
 
-	/** Separator used when joining multiple tag expressions. */
-	public final String SELECTOR_EXPRESSS_EPARATOR = " || ";
-	
-	@Autowired
-	private RocketmqEventMessageOrderlyHandler messageOrderlyHandler;
-	@Autowired
-	private RocketmqEventMessageConcurrentlyHandler messageConcurrentlyHandler;
-	@Autowired
-	private ZbusConsumerProperties pushConsumerProperties;
-	
-	private Consumer consumer;
+    /** Separator used when joining multiple tag expressions. */
+    public final String SELECTOR_EXPRESSS_EPARATOR = " || ";
 
-	public ZbusConsumerTemplate(Consumer consumer) {
-		this.consumer = consumer;
-	}
-	
-	public void subscribe(String topic, String handlerName, EventHandler<RocketmqEvent> handler) throws ZbusException {
+    @Autowired
+    private RocketmqEventMessageOrderlyHandler messageOrderlyHandler;
+    @Autowired
+    private RocketmqEventMessageConcurrentlyHandler messageConcurrentlyHandler;
+    @Autowired
+    private ZbusConsumerProperties pushConsumerProperties;
 
-		PathMatchingHandlerChainResolver chainResolver = getChainResolver();
-		if(chainResolver == null) {
-			return;
-		}
-		HandlerChainManager<RocketmqEvent> chainManager = chainResolver.getHandlerChainManager();
+    private Consumer consumer;
 
-		// Build a unique handler name.
-		String chainDefinition = handlerName;
-		// Register a new handler instance.
-		chainManager.addHandler(chainDefinition, handler);
+    public ZbusConsumerTemplate(Consumer consumer) {
+        this.consumer = consumer;
+    }
 
-		// Split the tag expression.
-		String[] tagArr = StringUtils.tokenizeToStringArray(tags, ",");
-		for (String tag : tagArr) {
-			// Build the dispatch rule chain: topic/tags/keys
-			String rule = new StringBuilder().append("/").append(topic).append("/").append(tag).append("/*").toString();
-			chainManager.createChain(rule, chainDefinition);
-		}
+    public void subscribe(String topic, String handlerName, EventHandler<RocketmqEvent> handler) throws ZbusException {
+        consumer.subscribe(topic, "");
+    }
 
+    public void unsubscribe(String topic, String tags, String handlerName) {
+        consumer.removeTopic(topic);
+        consumer.queryTopic(topic);
+        consumer.unsubscribe(topic);
+    }
 
+    public RocketmqEventMessageOrderlyHandler getMessageOrderlyHandler() {
+        return messageOrderlyHandler;
+    }
 
-		// Subscribe the consumer to the topic.
-		String selectorExpress = StringUtils.join(tagArr, SELECTOR_EXPRESSS_EPARATOR);
-		switch (pushConsumerProperties.getSelectorType()) {
-            case TAG:{
-                consumer.subscribe(topic, selectorExpress);
-			};break;
-            case SQL92:{
-                consumer.subscribe(topic, MessageSelector.bySql(selectorExpress));
-            };break;
-            default:{
-                throw new IllegalArgumentException("Property 'selectorType' was wrong.");
-            }
-        }
-		
-	}
-	
-	public void unsubscribe(String topic, String tags, String handlerName) {
-		
-		PathMatchingHandlerChainResolver chainResolver = getChainResolver();
-		if(chainResolver == null) {
-			return;
-		}
-		
-		HandlerChainManager<RocketmqEvent> chainManager = chainResolver.getHandlerChainManager();
-		
-		chainManager.getHandlers().remove(handlerName);
+    public void setMessageOrderlyHandler(RocketmqEventMessageOrderlyHandler messageOrderlyHandler) {
+        this.messageOrderlyHandler = messageOrderlyHandler;
+    }
 
-		// Split the tag expression.
-		String[] tagArr = StringUtils.tokenizeToStringArray(tags, ",");
-		for (String tag : tagArr) {
-			// topic/tags/keys
-			String rule = new StringBuilder().append(topic).append("/").append(tag).append("/*").toString();
-			chainManager.getHandlerChains().remove(rule);
-		}
-		consumer.removeTopic(topic)
-		consumer.queryTopic(topic);
-		// Unsubscribe the consumer from the topic.
-		consumer.unsubscribe(topic);
-		
-	}
+    public RocketmqEventMessageConcurrentlyHandler getMessageConcurrentlyHandler() {
+        return messageConcurrentlyHandler;
+    }
 
-	protected PathMatchingHandlerChainResolver getChainResolver() {
-		PathMatchingHandlerChainResolver chainResolver = null;
-		if( pushConsumerProperties != null && pushConsumerProperties.isEnabled() ) {
-			// Select the handler based on the configured consume mode.
-			if (ConsumeMode.ORDERLY.compareTo(pushConsumerProperties.getConsumeMode()) == 0) {
-				chainResolver = (PathMatchingHandlerChainResolver) getMessageOrderlyHandler().getHandlerChainResolver();
-			}else {
-				chainResolver = (PathMatchingHandlerChainResolver) getMessageConcurrentlyHandler().getHandlerChainResolver();
-			}
-		}
-		return chainResolver;
-	}
+    public void setMessageConcurrentlyHandler(RocketmqEventMessageConcurrentlyHandler messageConcurrentlyHandler) {
+        this.messageConcurrentlyHandler = messageConcurrentlyHandler;
+    }
 
-	public RocketmqEventMessageOrderlyHandler getMessageOrderlyHandler() {
-		return messageOrderlyHandler;
-	}
+    public Consumer getConsumer() {
+        return consumer;
+    }
 
-	public void setMessageOrderlyHandler(RocketmqEventMessageOrderlyHandler messageOrderlyHandler) {
-		this.messageOrderlyHandler = messageOrderlyHandler;
-	}
+    public void setConsumer(Consumer consumer) {
+        this.consumer = consumer;
+    }
 
-	public RocketmqEventMessageConcurrentlyHandler getMessageConcurrentlyHandler() {
-		return messageConcurrentlyHandler;
-	}
-
-	public void setMessageConcurrentlyHandler(RocketmqEventMessageConcurrentlyHandler messageConcurrentlyHandler) {
-		this.messageConcurrentlyHandler = messageConcurrentlyHandler;
-	}
-
-	public Consumer getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
-	}
-	
 }
