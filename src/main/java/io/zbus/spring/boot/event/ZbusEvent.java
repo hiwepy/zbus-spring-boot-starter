@@ -26,7 +26,7 @@ import io.zbus.mq.Message;
  * carrying its topic, tag, body and an Ant-style route expression
  * ({@code /topic/tag/keys}) used by the handler-chain resolver.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @SuppressWarnings("serial")

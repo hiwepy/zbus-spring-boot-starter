@@ -28,7 +28,7 @@ import com.lmax.disruptor.spring.boot.event.DisruptorEvent;
  * topic, tag and body and deriving an Ant-style route expression
  * ({@code /topic/tag/keys}) for handler-chain resolution.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @SuppressWarnings("serial")

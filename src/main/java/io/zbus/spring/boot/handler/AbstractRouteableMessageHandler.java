@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * {@link HandlerChain} for an event using a {@link HandlerChainResolver}.
  *
  * @param <T> the event type, bound to {@link ZbusEvent}
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class AbstractRouteableMessageHandler<T extends ZbusEvent> extends AbstractEnabledMessageHandler<T> {
