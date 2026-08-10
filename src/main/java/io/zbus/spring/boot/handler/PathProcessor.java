@@ -7,7 +7,7 @@ import io.zbus.spring.boot.event.ZbusEvent;
  * path (e.g. {@code topic/tag/keys}).
  *
  * @param <T> the event type, bound to {@link ZbusEvent}
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public interface PathProcessor<T extends ZbusEvent> {

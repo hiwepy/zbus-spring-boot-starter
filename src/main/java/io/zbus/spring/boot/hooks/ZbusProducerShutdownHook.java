@@ -5,7 +5,7 @@ import io.zbus.mq.Producer;
 /**
  * JVM shutdown hook placeholder for a Zbus {@link Producer}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusProducerShutdownHook extends Thread{

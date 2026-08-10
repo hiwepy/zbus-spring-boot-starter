@@ -6,7 +6,7 @@ import io.zbus.spring.boot.event.ZbusEvent;
  * Strategy for resolving the {@link HandlerChain} to execute for a given event.
  *
  * @param <T> the event type, bound to {@link ZbusEvent}
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public interface HandlerChainResolver<T extends ZbusEvent> {
