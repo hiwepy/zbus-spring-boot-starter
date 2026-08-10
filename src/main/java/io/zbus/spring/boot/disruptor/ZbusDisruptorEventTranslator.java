@@ -9,7 +9,7 @@ import io.zbus.spring.boot.event.ZbusDisruptorEvent;
  * Disruptor {@link EventTranslatorOneArg} that copies a received
  * {@link Message} into a {@link ZbusDisruptorEvent} for asynchronous processing.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusDisruptorEventTranslator implements EventTranslatorOneArg<ZbusDisruptorEvent, Message> {
