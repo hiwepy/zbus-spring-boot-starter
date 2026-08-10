@@ -38,7 +38,7 @@ import io.zbus.spring.boot.util.StringUtils;
  * indexes them by the {@link ZbusRule} annotation metadata and builds the
  * handler chain used by the Zbus consumer.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Configuration

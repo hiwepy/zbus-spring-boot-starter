@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * {@link Consumer} together with convenience methods for subscribing to topics
  * and binding {@link EventHandler} instances to the handler-chain registry.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusConsumerTemplate {
