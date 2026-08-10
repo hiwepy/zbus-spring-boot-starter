@@ -11,7 +11,7 @@ import io.zbus.spring.boot.handler.chain.HandlerChain;
  * </p>
  *
  * @param <T> the event type, bound to {@link ZbusEvent}
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public interface EventHandler<T extends ZbusEvent> {

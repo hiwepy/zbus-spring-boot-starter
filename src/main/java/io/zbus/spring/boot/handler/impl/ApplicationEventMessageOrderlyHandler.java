@@ -13,7 +13,7 @@ import io.zbus.spring.boot.handler.ZbusMessageHandler;
  * Message handler that publishes a {@link ZbusEvent} through the Spring
  * {@link ApplicationEventPublisher}, allowing tag-specific listeners to receive it.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ApplicationEventMessageOrderlyHandler implements ZbusMessageHandler, ApplicationEventPublisherAware {
