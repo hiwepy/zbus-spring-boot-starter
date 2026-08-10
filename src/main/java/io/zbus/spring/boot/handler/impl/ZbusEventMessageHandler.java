@@ -16,7 +16,7 @@ import io.zbus.spring.boot.handler.chain.ProxiedHandlerChain;
  * {@link Message} in a {@link ZbusEvent} and dispatches it through the
  * configured {@link HandlerChain}.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusEventMessageHandler extends AbstractRouteableMessageHandler<ZbusEvent> implements ZbusMessageHandler {

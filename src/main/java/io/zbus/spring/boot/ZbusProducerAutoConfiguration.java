@@ -21,7 +21,7 @@ import org.springframework.core.Ordered;
 /**
  * Spring Boot auto-configuration for the Zbus producer.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @Configuration

@@ -12,7 +12,7 @@ import io.zbus.mq.Producer;
  * {@link Producer} together with convenience methods for declaring
  * topics/groups and publishing messages.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusProducerTemplate {
