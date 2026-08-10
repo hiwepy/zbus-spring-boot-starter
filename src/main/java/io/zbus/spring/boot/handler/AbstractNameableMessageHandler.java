@@ -7,7 +7,7 @@ import io.zbus.spring.boot.event.ZbusEvent;
  * configurable name used by the handler-chain manager.
  *
  * @param <T> the event type, bound to {@link ZbusEvent}
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public abstract class AbstractNameableMessageHandler<T extends ZbusEvent> implements EventHandler<T>, Nameable {
