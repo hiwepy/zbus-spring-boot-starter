@@ -8,7 +8,7 @@ import io.zbus.mq.Consumer;
  * JVM shutdown hook that closes a Zbus {@link Consumer}, releasing resources
  * and unregistering from the broker.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class ZbusConsumerShutdownHook extends Thread{
