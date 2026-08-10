@@ -29,7 +29,7 @@ import io.zbus.spring.boot.handler.ZbusMessageHandler;
  * nested handlers, allowing a single message to be processed by multiple
  * implementations.
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class NestedMessageOrderlyHandler implements ZbusMessageHandler {
