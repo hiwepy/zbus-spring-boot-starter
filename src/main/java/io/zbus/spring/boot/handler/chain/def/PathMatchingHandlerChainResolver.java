@@ -36,23 +36,50 @@ public class PathMatchingHandlerChainResolver implements HandlerChainResolver<Zb
         this.handlerChainManager = new DefaultHandlerChainManager();
     }
 
+	/**
+	 * Returns the handler chain manager.
+	 *
+	 * @return the handler chain manager
+	 */
 	public HandlerChainManager<ZbusEvent> getHandlerChainManager() {
 		return handlerChainManager;
 	}
 
+	/**
+	 * Sets the handler chain manager.
+	 *
+	 * @param handlerChainManager the handler chain manager
+	 */
 	public void setHandlerChainManager(HandlerChainManager<ZbusEvent> handlerChainManager) {
 		this.handlerChainManager = handlerChainManager;
 	}
 
+	/**
+	 * Returns the path matcher.
+	 *
+	 * @return the path matcher
+	 */
 	public PathMatcher getPathMatcher() {
 		return pathMatcher;
 	}
 
+	/**
+	 * Sets the path matcher.
+	 *
+	 * @param pathMatcher the path matcher
+	 */
 	public void setPathMatcher(PathMatcher pathMatcher) {
 		this.pathMatcher = pathMatcher;
 	}
 	
 	
+	/**
+	 * get Chain.
+	 *
+	 * @param event the event
+	 * @param originalChain the original chain
+	 * @return the result
+	 */
 	public HandlerChain<ZbusEvent> getChain(ZbusEvent event, HandlerChain<ZbusEvent> originalChain) {
         HandlerChainManager<ZbusEvent> handlerChainManager = getHandlerChainManager();
         if (!handlerChainManager.hasChains()) {

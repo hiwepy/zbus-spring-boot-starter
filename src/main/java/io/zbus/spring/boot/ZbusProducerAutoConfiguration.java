@@ -33,6 +33,12 @@ public class ZbusProducerAutoConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZbusProducerAutoConfiguration.class);
 
+    /**
+     * configure.
+     *
+     * @param producer the producer
+     * @param properties the properties
+     */
     public void configure(DefaultMQProducer producer, ZbusProducerProperties properties) {
         producer.setProducerGroup(properties.getProducerGroup());
         producer.setDefaultTopicQueueNums(properties.getDefaultTopicQueueNums());
@@ -84,6 +90,13 @@ public class ZbusProducerAutoConfiguration {
     }
 
     @Bean
+    /**
+     * rocketmq Producer Template.
+     *
+     * @param producer the producer
+     * @return the result
+     * @throws MQClientException if an error occurs
+     */
     public ZbusProducerTemplate rocketmqProducerTemplate(DefaultMQProducer producer) throws MQClientException {
         return new ZbusProducerTemplate(producer);
     }

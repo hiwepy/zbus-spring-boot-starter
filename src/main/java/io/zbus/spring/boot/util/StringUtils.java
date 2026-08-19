@@ -1323,6 +1323,13 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return new String[] {beforeDelimiter, afterDelimiter};
 	}
 	
+	/**
+	 * splits.
+	 *
+	 * @param toSplit the to split
+	 * @param regex the regex
+	 * @return the result
+	 */
 	public static String[] splits(String toSplit, String regex) {
 		if (!hasLength(toSplit) || !hasLength(regex)) {
 			return new String[] {};
@@ -1449,6 +1456,12 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return (source != null ? "[" + source + "]" : null);
 	}
 
+	/**
+	 * ditto.
+	 *
+	 * @param source the source
+	 * @return the result
+	 */
 	public static String ditto(String source) {
 		return (source != null ? "\"" + source + "\"" : null);
 	}
@@ -1530,6 +1543,12 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
 		return strs;
 	}
 
+	/**
+	 * trim To String.
+	 *
+	 * @param str the str
+	 * @return the result
+	 */
 	public static String trimToString(String str) {
 		if (str == null || str.trim().length() == 0) {
 			return null;

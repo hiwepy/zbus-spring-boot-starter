@@ -320,6 +320,12 @@ public class Ini implements Map<String, Ini.Section> {
         return null;
     }
 
+    /**
+     * equals.
+     *
+     * @param obj the obj
+     * @return the result
+     */
     public boolean equals(Object obj) {
         if (obj instanceof Ini) {
             Ini ini = (Ini) obj;
@@ -329,10 +335,20 @@ public class Ini implements Map<String, Ini.Section> {
     }
 
     @Override
+    /**
+     * hash Code.
+     *
+     * @return the result
+     */
     public int hashCode() {
         return this.sections.hashCode();
     }
 
+    /**
+     * to String.
+     *
+     * @return the result
+     */
     public String toString() {
         if (this.sections == null || this.sections.isEmpty()) {
             return "<empty INI>";
@@ -350,42 +366,97 @@ public class Ini implements Map<String, Ini.Section> {
         }
     }
 
+    /**
+     * size.
+     *
+     * @return the result
+     */
     public int size() {
         return this.sections.size();
     }
 
+    /**
+     * contains Key.
+     *
+     * @param key the key
+     * @return the result
+     */
     public boolean containsKey(Object key) {
         return this.sections.containsKey(key);
     }
 
+    /**
+     * contains Value.
+     *
+     * @param value the value
+     * @return the result
+     */
     public boolean containsValue(Object value) {
         return this.sections.containsValue(value);
     }
 
+    /**
+     * get.
+     *
+     * @param key the key
+     * @return the result
+     */
     public Section get(Object key) {
         return this.sections.get(key);
     }
 
+    /**
+     * put.
+     *
+     * @param key the key
+     * @param value the value
+     * @return the result
+     */
     public Section put(String key, Section value) {
         return this.sections.put(key, value);
     }
 
+    /**
+     * remove.
+     *
+     * @param key the key
+     * @return the result
+     */
     public Section remove(Object key) {
         return this.sections.remove(key);
     }
 
+    /**
+     * put All.
+     *
+     * @param m the m
+     */
     public void putAll(Map<? extends String, ? extends Section> m) {
         this.sections.putAll(m);
     }
 
+    /**
+     * clear.
+     *
+     */
     public void clear() {
         this.sections.clear();
     }
 
+    /**
+     * key Set.
+     *
+     * @return the result
+     */
     public Set<String> keySet() {
         return Collections.unmodifiableSet(this.sections.keySet());
     }
 
+    /**
+     * values.
+     *
+     * @return the result
+     */
     public Collection<Section> values() {
         return Collections.unmodifiableCollection(this.sections.values());
     }
@@ -528,18 +599,39 @@ public class Ini implements Map<String, Ini.Section> {
             return props;
         }
 
+        /**
+         * Returns the name.
+         *
+         * @return the name
+         */
         public String getName() {
             return this.name;
         }
 
+        /**
+         * clear.
+         *
+         */
         public void clear() {
             this.props.clear();
         }
 
+        /**
+         * contains Key.
+         *
+         * @param key the key
+         * @return the result
+         */
         public boolean containsKey(Object key) {
             return this.props.containsKey(key);
         }
 
+        /**
+         * contains Value.
+         *
+         * @param value the value
+         * @return the result
+         */
         public boolean containsValue(Object value) {
             return this.props.containsValue(value);
         }
@@ -548,38 +640,87 @@ public class Ini implements Map<String, Ini.Section> {
             return this.props.entrySet();
         }
 
+        /**
+         * get.
+         *
+         * @param key the key
+         * @return the result
+         */
         public String get(Object key) {
             return this.props.get(key);
         }
 
+        /**
+         * Returns the empty.
+         *
+         * @return the empty
+         */
         public boolean isEmpty() {
             return this.props.isEmpty();
         }
 
+        /**
+         * key Set.
+         *
+         * @return the result
+         */
         public Set<String> keySet() {
             return this.props.keySet();
         }
 
+        /**
+         * put.
+         *
+         * @param key the key
+         * @param value the value
+         * @return the result
+         */
         public String put(String key, String value) {
             return this.props.put(key, value);
         }
 
+        /**
+         * put All.
+         *
+         * @param m the m
+         */
         public void putAll(Map<? extends String, ? extends String> m) {
             this.props.putAll(m);
         }
 
+        /**
+         * remove.
+         *
+         * @param key the key
+         * @return the result
+         */
         public String remove(Object key) {
             return this.props.remove(key);
         }
 
+        /**
+         * size.
+         *
+         * @return the result
+         */
         public int size() {
             return this.props.size();
         }
 
+        /**
+         * values.
+         *
+         * @return the result
+         */
         public Collection<String> values() {
             return this.props.values();
         }
 
+        /**
+         * to String.
+         *
+         * @return the result
+         */
         public String toString() {
             String name = getName();
             if (DEFAULT_SECTION_NAME.equals(name)) {
@@ -589,6 +730,12 @@ public class Ini implements Map<String, Ini.Section> {
         }
 
         @Override
+        /**
+         * equals.
+         *
+         * @param obj the obj
+         * @return the result
+         */
         public boolean equals(Object obj) {
             if (obj instanceof Section) {
                 Section other = (Section) obj;
@@ -598,6 +745,11 @@ public class Ini implements Map<String, Ini.Section> {
         }
 
         @Override
+        /**
+         * hash Code.
+         *
+         * @return the result
+         */
         public int hashCode() {
             return this.name.hashCode() * 31 + this.props.hashCode();
         }

@@ -43,6 +43,11 @@ public class DefaultHandlerChainManager implements HandlerChainManager<ZbusEvent
         return handlers;
     }
 
+    /**
+     * Sets the handlers.
+     *
+     * @param handlers the handlers
+     */
     public void setHandlers(Map<String, EventHandler<ZbusEvent>> handlers) {
         this.handlers = handlers;
     }
@@ -51,14 +56,31 @@ public class DefaultHandlerChainManager implements HandlerChainManager<ZbusEvent
         return handlerChains;
     }
     
+    /**
+     * Sets the handler chains.
+     *
+     * @param handlerChains the handler chains
+     */
     public void setHandlerChains(Map<String, NamedHandlerList<ZbusEvent>> handlerChains) {
         this.handlerChains = handlerChains;
     }
 
+    /**
+     * get Handler.
+     *
+     * @param name the name
+     * @return the result
+     */
     public EventHandler<ZbusEvent> getHandler(String name) {
         return this.handlers.get(name);
     }
 
+    /**
+     * add Handler.
+     *
+     * @param name the name
+     * @param handler the handler
+     */
     public void addHandler(String name, EventHandler<ZbusEvent> handler) {
         addHandler(name, handler, true);
     }
@@ -73,6 +95,12 @@ public class DefaultHandlerChainManager implements HandlerChainManager<ZbusEvent
         }
     }
 
+    /**
+     * create Chain.
+     *
+     * @param chainName the chain name
+     * @param chainDefinition the chain definition
+     */
     public void createChain(String chainName, String chainDefinition) {
         if (StringUtils.isBlank(chainName)) {
             throw new NullPointerException("chainName cannot be null or empty.");
@@ -104,10 +132,21 @@ public class DefaultHandlerChainManager implements HandlerChainManager<ZbusEvent
         return split;
     }
 
+    /**
+     * main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args) {
 		
 	}
     
+    /**
+     * add To Chain.
+     *
+     * @param chainName the chain name
+     * @param handlerName the handler name
+     */
     public void addToChain(String chainName, String handlerName) {
         if (StringUtils.isBlank(chainName)) {
             throw new IllegalArgumentException("chainName cannot be null or empty.");
@@ -131,20 +170,43 @@ public class DefaultHandlerChainManager implements HandlerChainManager<ZbusEvent
         return chain;
     }
 
+    /**
+     * get Chain.
+     *
+     * @param chainName the chain name
+     * @return the result
+     */
     public NamedHandlerList<ZbusEvent> getChain(String chainName) {
         return this.handlerChains.get(chainName);
     }
 
+    /**
+     * has Chains.
+     *
+     * @return the result
+     */
     public boolean hasChains() {
         return !CollectionUtils.isEmpty(this.handlerChains);
     }
 
     @SuppressWarnings("unchecked")
+	/**
+	 * Returns the chain names.
+	 *
+	 * @return the chain names
+	 */
 	public Set<String> getChainNames() {
         return this.handlerChains != null ? this.handlerChains.keySet() : Collections.EMPTY_SET;
     }
 
     @Override
+    /**
+     * proxy.
+     *
+     * @param original the original
+     * @param chainName the chain name
+     * @return the result
+     */
     public HandlerChain<ZbusEvent> proxy(HandlerChain<ZbusEvent> original, String chainName) {
         NamedHandlerList<ZbusEvent> configured = getChain(chainName);
         if (configured == null) {

@@ -15,6 +15,13 @@ import io.zbus.spring.boot.event.ZbusDisruptorEvent;
 public class ZbusDisruptorEventTranslator implements EventTranslatorOneArg<ZbusDisruptorEvent, Message> {
 
 	@Override
+	/**
+	 * translate To.
+	 *
+	 * @param event the event
+	 * @param sequence the sequence
+	 * @param msgExt the msg ext
+	 */
 	public void translateTo(ZbusDisruptorEvent event, long sequence, Message msgExt) {
 
 		event.setMessageExt(msgExt);

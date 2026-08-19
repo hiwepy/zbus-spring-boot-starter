@@ -25,6 +25,13 @@ public class AbstractAdviceMessageHandler<T extends ZbusEvent> extends AbstractE
 	protected void postHandle(T event) throws Exception {
 	}
 
+	/**
+	 * after Completion.
+	 *
+	 * @param event the event
+	 * @param exception the exception
+	 * @throws Exception if an error occurs
+	 */
 	public void afterCompletion(T event, Exception exception) throws Exception {
 	}
 
@@ -33,6 +40,13 @@ public class AbstractAdviceMessageHandler<T extends ZbusEvent> extends AbstractE
 	}
 
 	@Override
+	/**
+	 * do Handler Internal.
+	 *
+	 * @param event the event
+	 * @param handlerChain the handler chain
+	 * @throws Exception if an error occurs
+	 */
 	public void doHandlerInternal(T event, HandlerChain<T> handlerChain) throws Exception {
 
 		if (!isEnabled(event)) {
@@ -90,10 +104,20 @@ public class AbstractAdviceMessageHandler<T extends ZbusEvent> extends AbstractE
 		return isEnabled();
 	}
 	
+	/**
+	 * Returns the enabled.
+	 *
+	 * @return the enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}

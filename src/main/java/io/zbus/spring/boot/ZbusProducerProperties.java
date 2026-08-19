@@ -128,130 +128,290 @@ public class ZbusProducerProperties{
 	private int checkRequestHoldMax = 2000;
 	
 	
+	/**
+	 * Returns the enabled.
+	 *
+	 * @return the enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Returns the producer group.
+	 *
+	 * @return the producer group
+	 */
 	public String getProducerGroup() {
 		return StringUtils.isEmpty(producerGroup) ? "ProducerGroup" : producerGroup;
 	}
 
+	/**
+	 * Sets the producer group.
+	 *
+	 * @param producerGroup the producer group
+	 */
 	public void setProducerGroup(String producerGroup) {
 		this.producerGroup = producerGroup;
 	}
 
+	/**
+	 * Returns the default topic queue nums.
+	 *
+	 * @return the default topic queue nums
+	 */
 	public int getDefaultTopicQueueNums() {
 		return defaultTopicQueueNums;
 	}
 
+	/**
+	 * Sets the default topic queue nums.
+	 *
+	 * @param defaultTopicQueueNums the default topic queue nums
+	 */
 	public void setDefaultTopicQueueNums(int defaultTopicQueueNums) {
 		this.defaultTopicQueueNums = defaultTopicQueueNums;
 	}
 
+	/**
+	 * Returns the send msg timeout.
+	 *
+	 * @return the send msg timeout
+	 */
 	public int getSendMsgTimeout() {
 		return sendMsgTimeout;
 	}
 
+	/**
+	 * Sets the send msg timeout.
+	 *
+	 * @param sendMsgTimeout the send msg timeout
+	 */
 	public void setSendMsgTimeout(int sendMsgTimeout) {
 		this.sendMsgTimeout = sendMsgTimeout;
 	}
 
+	/**
+	 * Returns the send latency fault enable.
+	 *
+	 * @return the send latency fault enable
+	 */
 	public boolean isSendLatencyFaultEnable() {
 		return sendLatencyFaultEnable;
 	}
 
+	/**
+	 * Sets the send latency fault enable.
+	 *
+	 * @param sendLatencyFaultEnable the send latency fault enable
+	 */
 	public void setSendLatencyFaultEnable(boolean sendLatencyFaultEnable) {
 		this.sendLatencyFaultEnable = sendLatencyFaultEnable;
 	}
 
+	/**
+	 * Returns the compress msg body over howmuch.
+	 *
+	 * @return the compress msg body over howmuch
+	 */
 	public int getCompressMsgBodyOverHowmuch() {
 		return compressMsgBodyOverHowmuch;
 	}
 
+	/**
+	 * Sets the compress msg body over howmuch.
+	 *
+	 * @param compressMsgBodyOverHowmuch the compress msg body over howmuch
+	 */
 	public void setCompressMsgBodyOverHowmuch(int compressMsgBodyOverHowmuch) {
 		this.compressMsgBodyOverHowmuch = compressMsgBodyOverHowmuch;
 	}
 
+	/**
+	 * Returns the retry times when send failed.
+	 *
+	 * @return the retry times when send failed
+	 */
 	public int getRetryTimesWhenSendFailed() {
 		return retryTimesWhenSendFailed;
 	}
 
+	/**
+	 * Sets the retry times when send failed.
+	 *
+	 * @param retryTimesWhenSendFailed the retry times when send failed
+	 */
 	public void setRetryTimesWhenSendFailed(int retryTimesWhenSendFailed) {
 		this.retryTimesWhenSendFailed = retryTimesWhenSendFailed;
 	}
 
+	/**
+	 * Returns the retry times when send async failed.
+	 *
+	 * @return the retry times when send async failed
+	 */
 	public int getRetryTimesWhenSendAsyncFailed() {
 		return retryTimesWhenSendAsyncFailed;
 	}
 
+	/**
+	 * Sets the retry times when send async failed.
+	 *
+	 * @param retryTimesWhenSendAsyncFailed the retry times when send async failed
+	 */
 	public void setRetryTimesWhenSendAsyncFailed(int retryTimesWhenSendAsyncFailed) {
 		this.retryTimesWhenSendAsyncFailed = retryTimesWhenSendAsyncFailed;
 	}
 
+	/**
+	 * Returns the retry another broker when not store o k.
+	 *
+	 * @return the retry another broker when not store o k
+	 */
 	public boolean isRetryAnotherBrokerWhenNotStoreOK() {
 		return retryAnotherBrokerWhenNotStoreOK;
 	}
 
+	/**
+	 * Sets the retry another broker when not store o k.
+	 *
+	 * @param retryAnotherBrokerWhenNotStoreOK the retry another broker when not store o k
+	 */
 	public void setRetryAnotherBrokerWhenNotStoreOK(boolean retryAnotherBrokerWhenNotStoreOK) {
 		this.retryAnotherBrokerWhenNotStoreOK = retryAnotherBrokerWhenNotStoreOK;
 	}
 
+	/**
+	 * Returns the max message size.
+	 *
+	 * @return the max message size
+	 */
 	public int getMaxMessageSize() {
 		return maxMessageSize;
 	}
 
+	/**
+	 * Sets the max message size.
+	 *
+	 * @param maxMessageSize the max message size
+	 */
 	public void setMaxMessageSize(int maxMessageSize) {
 		this.maxMessageSize = maxMessageSize;
 	}
 
+	/**
+	 * Returns the latency max.
+	 *
+	 * @return the latency max
+	 */
 	public long[] getLatencyMax() {
 		return latencyMax;
 	}
 
+	/**
+	 * Sets the latency max.
+	 *
+	 * @param latencyMax the latency max
+	 */
 	public void setLatencyMax(long[] latencyMax) {
 		this.latencyMax = latencyMax;
 	}
 
+	/**
+	 * Returns the not available duration.
+	 *
+	 * @return the not available duration
+	 */
 	public long[] getNotAvailableDuration() {
 		return notAvailableDuration;
 	}
 
+	/**
+	 * Sets the not available duration.
+	 *
+	 * @param notAvailableDuration the not available duration
+	 */
 	public void setNotAvailableDuration(long[] notAvailableDuration) {
 		this.notAvailableDuration = notAvailableDuration;
 	}
 	
+	/**
+	 * Returns the transaction.
+	 *
+	 * @return the transaction
+	 */
 	public boolean isTransaction() {
 		return transaction;
 	}
 
+	/**
+	 * Sets the transaction.
+	 *
+	 * @param transaction the transaction
+	 */
 	public void setTransaction(boolean transaction) {
 		this.transaction = transaction;
 	}
 
+	/**
+	 * Returns the check thread pool min size.
+	 *
+	 * @return the check thread pool min size
+	 */
 	public int getCheckThreadPoolMinSize() {
 		return checkThreadPoolMinSize;
 	}
 
+	/**
+	 * Sets the check thread pool min size.
+	 *
+	 * @param checkThreadPoolMinSize the check thread pool min size
+	 */
 	public void setCheckThreadPoolMinSize(int checkThreadPoolMinSize) {
 		this.checkThreadPoolMinSize = checkThreadPoolMinSize;
 	}
 
+	/**
+	 * Returns the check thread pool max size.
+	 *
+	 * @return the check thread pool max size
+	 */
 	public int getCheckThreadPoolMaxSize() {
 		return checkThreadPoolMaxSize;
 	}
 
+	/**
+	 * Sets the check thread pool max size.
+	 *
+	 * @param checkThreadPoolMaxSize the check thread pool max size
+	 */
 	public void setCheckThreadPoolMaxSize(int checkThreadPoolMaxSize) {
 		this.checkThreadPoolMaxSize = checkThreadPoolMaxSize;
 	}
 
+	/**
+	 * Returns the check request hold max.
+	 *
+	 * @return the check request hold max
+	 */
 	public int getCheckRequestHoldMax() {
 		return checkRequestHoldMax;
 	}
 
+	/**
+	 * Sets the check request hold max.
+	 *
+	 * @param checkRequestHoldMax the check request hold max
+	 */
 	public void setCheckRequestHoldMax(int checkRequestHoldMax) {
 		this.checkRequestHoldMax = checkRequestHoldMax;
 	}

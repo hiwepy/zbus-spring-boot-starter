@@ -21,6 +21,11 @@ public abstract class AbstractNameableMessageHandler<T extends ZbusEvent> implem
 	}
 
 	@Override
+	/**
+	 * Sets the name.
+	 *
+	 * @param name the name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -83,10 +83,20 @@ public class AbstractRouteableMessageHandler<T extends ZbusEvent> extends Abstra
 		chain.doHandler(event);
 	}
 
+	/**
+	 * Returns the handler chain resolver.
+	 *
+	 * @return the handler chain resolver
+	 */
 	public HandlerChainResolver<T> getHandlerChainResolver() {
 		return handlerChainResolver;
 	}
 
+	/**
+	 * Sets the handler chain resolver.
+	 *
+	 * @param handlerChainResolver the handler chain resolver
+	 */
 	public void setHandlerChainResolver(HandlerChainResolver<T> handlerChainResolver) {
 		this.handlerChainResolver = handlerChainResolver;
 	}

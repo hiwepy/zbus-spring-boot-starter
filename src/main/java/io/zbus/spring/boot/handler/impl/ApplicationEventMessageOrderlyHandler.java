@@ -22,22 +22,48 @@ public class ApplicationEventMessageOrderlyHandler implements ZbusMessageHandler
 	private ApplicationEventPublisher eventPublisher;
 
 	@Override
+	/**
+	 * pre Handle.
+	 *
+	 * @param msgExt the msg ext
+	 * @return the result
+	 * @throws Exception if an error occurs
+	 */
 	public boolean preHandle(Message msgExt) throws Exception {
 		return true;
 	}
 
 	@Override
+	/**
+	 * handle Message.
+	 *
+	 * @param msgExt the msg ext
+	 * @throws Exception if an error occurs
+	 */
 	public void handleMessage(Message msgExt) throws Exception {
 		// Publish a message-arrived event so tag-specific listeners can handle it.
 		getEventPublisher().publishEvent(new ZbusEvent(msgExt));
 	}
 	
 	@Override
+	/**
+	 * post Handle.
+	 *
+	 * @param msgExt the msg ext
+	 * @throws Exception if an error occurs
+	 */
 	public void postHandle(Message msgExt) throws Exception {
 		
 	}
 
 	@Override
+	/**
+	 * after Completion.
+	 *
+	 * @param msgExt the msg ext
+	 * @param ex the ex
+	 * @throws Exception if an error occurs
+	 */
 	public void afterCompletion(Message msgExt, Exception ex) throws Exception {
 		if(ex != null) {
 			LOG.warn("Consume message failed. messageExt:{}", msgExt, ex);
@@ -45,10 +71,20 @@ public class ApplicationEventMessageOrderlyHandler implements ZbusMessageHandler
 	}
 
 	@Override
+	/**
+	 * Sets the application event publisher.
+	 *
+	 * @param applicationEventPublisher the application event publisher
+	 */
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.eventPublisher = applicationEventPublisher;
 	}
 
+	/**
+	 * Returns the event publisher.
+	 *
+	 * @return the event publisher
+	 */
 	public ApplicationEventPublisher getEventPublisher() {
 		return eventPublisher;
 	}

@@ -2,6 +2,8 @@ package io.zbus.client.exception;
 
 /**
  * Stub for zbus MQ client exception.
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class MQClientException extends Exception {
 

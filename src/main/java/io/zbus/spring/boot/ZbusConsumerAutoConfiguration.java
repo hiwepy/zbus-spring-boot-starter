@@ -80,6 +80,10 @@ public class ZbusConsumerAutoConfiguration {
             consumer.setMessageHandler(messageHandler);
 
             Executors.newScheduledThreadPool(1).schedule(new Thread() {
+                /**
+                 * run.
+                 *
+                 */
                 public void run() {
                     try {
                         consumer.start();
@@ -99,6 +103,13 @@ public class ZbusConsumerAutoConfiguration {
     }
 
     @Bean
+    /**
+     * rocketmq Consumer Template.
+     *
+     * @param consumer the consumer
+     * @return the result
+     * @throws MQClientException if an error occurs
+     */
     public ZbusConsumerTemplate rocketmqConsumerTemplate(Consumer consumer) throws MQClientException {
         return new ZbusConsumerTemplate(consumer);
     }

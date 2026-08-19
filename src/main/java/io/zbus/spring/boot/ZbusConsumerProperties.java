@@ -168,26 +168,56 @@ public class ZbusConsumerProperties {
 	@NestedConfigurationProperty
 	private ZbusConsumerEventProperties event;
     
+	/**
+	 * Returns the enabled.
+	 *
+	 * @return the enabled
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 	
+	/**
+	 * Returns the consumer group.
+	 *
+	 * @return the consumer group
+	 */
 	public String getConsumerGroup() {
 		return consumerGroup;
 	}
 
+	/**
+	 * Sets the consumer group.
+	 *
+	 * @param consumerGroup the consumer group
+	 */
 	public void setConsumerGroup(String consumerGroup) {
 		this.consumerGroup = consumerGroup;
 	}
 
+	/**
+	 * Returns the message model.
+	 *
+	 * @return the message model
+	 */
 	public String getMessageModel() {
 		return messageModel;
 	}
 
+	/**
+	 * Sets the message model.
+	 *
+	 * @param messageModel the message model
+	 */
 	public void setMessageModel(String messageModel) {
 		this.messageModel = messageModel;
 	}
@@ -196,134 +226,299 @@ public class ZbusConsumerProperties {
 		return subscription;
 	}
 
+	/**
+	 * Sets the subscription.
+	 *
+	 * @param subscription the subscription
+	 */
 	public void setSubscription(Map<String, String> subscription) {
 		this.subscription = subscription;
 	}
 
+	/**
+	 * Returns the consume thread min.
+	 *
+	 * @return the consume thread min
+	 */
 	public int getConsumeThreadMin() {
 		return consumeThreadMin;
 	}
 
+	/**
+	 * Sets the consume thread min.
+	 *
+	 * @param consumeThreadMin the consume thread min
+	 */
 	public void setConsumeThreadMin(int consumeThreadMin) {
 		this.consumeThreadMin = consumeThreadMin;
 	}
 
+	/**
+	 * Returns the consume thread max.
+	 *
+	 * @return the consume thread max
+	 */
 	public int getConsumeThreadMax() {
 		return consumeThreadMax;
 	}
 
+	/**
+	 * Sets the consume thread max.
+	 *
+	 * @param consumeThreadMax the consume thread max
+	 */
 	public void setConsumeThreadMax(int consumeThreadMax) {
 		this.consumeThreadMax = consumeThreadMax;
 	}
 
+	/**
+	 * Returns the adjust thread pool nums threshold.
+	 *
+	 * @return the adjust thread pool nums threshold
+	 */
 	public long getAdjustThreadPoolNumsThreshold() {
 		return adjustThreadPoolNumsThreshold;
 	}
 
+	/**
+	 * Sets the adjust thread pool nums threshold.
+	 *
+	 * @param adjustThreadPoolNumsThreshold the adjust thread pool nums threshold
+	 */
 	public void setAdjustThreadPoolNumsThreshold(long adjustThreadPoolNumsThreshold) {
 		this.adjustThreadPoolNumsThreshold = adjustThreadPoolNumsThreshold;
 	}
 
+	/**
+	 * Returns the consume concurrently max span.
+	 *
+	 * @return the consume concurrently max span
+	 */
 	public int getConsumeConcurrentlyMaxSpan() {
 		return consumeConcurrentlyMaxSpan;
 	}
 
+	/**
+	 * Sets the consume concurrently max span.
+	 *
+	 * @param consumeConcurrentlyMaxSpan the consume concurrently max span
+	 */
 	public void setConsumeConcurrentlyMaxSpan(int consumeConcurrentlyMaxSpan) {
 		this.consumeConcurrentlyMaxSpan = consumeConcurrentlyMaxSpan;
 	}
 
+	/**
+	 * Returns the pull threshold for queue.
+	 *
+	 * @return the pull threshold for queue
+	 */
 	public int getPullThresholdForQueue() {
 		return pullThresholdForQueue;
 	}
 
+	/**
+	 * Sets the pull threshold for queue.
+	 *
+	 * @param pullThresholdForQueue the pull threshold for queue
+	 */
 	public void setPullThresholdForQueue(int pullThresholdForQueue) {
 		this.pullThresholdForQueue = pullThresholdForQueue;
 	}
 
+	/**
+	 * Returns the pull interval.
+	 *
+	 * @return the pull interval
+	 */
 	public long getPullInterval() {
 		return pullInterval;
 	}
 
+	/**
+	 * Sets the pull interval.
+	 *
+	 * @param pullInterval the pull interval
+	 */
 	public void setPullInterval(long pullInterval) {
 		this.pullInterval = pullInterval;
 	}
 
+	/**
+	 * Returns the consume message batch max size.
+	 *
+	 * @return the consume message batch max size
+	 */
 	public int getConsumeMessageBatchMaxSize() {
 		return consumeMessageBatchMaxSize;
 	}
 
+	/**
+	 * Sets the consume message batch max size.
+	 *
+	 * @param consumeMessageBatchMaxSize the consume message batch max size
+	 */
 	public void setConsumeMessageBatchMaxSize(int consumeMessageBatchMaxSize) {
 		this.consumeMessageBatchMaxSize = consumeMessageBatchMaxSize;
 	}
 
+	/**
+	 * Returns the pull batch size.
+	 *
+	 * @return the pull batch size
+	 */
 	public int getPullBatchSize() {
 		return pullBatchSize;
 	}
 
+	/**
+	 * Sets the pull batch size.
+	 *
+	 * @param pullBatchSize the pull batch size
+	 */
 	public void setPullBatchSize(int pullBatchSize) {
 		this.pullBatchSize = pullBatchSize;
 	}
 
+	/**
+	 * Returns the post subscription when pull.
+	 *
+	 * @return the post subscription when pull
+	 */
 	public boolean isPostSubscriptionWhenPull() {
 		return postSubscriptionWhenPull;
 	}
 
+	/**
+	 * Sets the post subscription when pull.
+	 *
+	 * @param postSubscriptionWhenPull the post subscription when pull
+	 */
 	public void setPostSubscriptionWhenPull(boolean postSubscriptionWhenPull) {
 		this.postSubscriptionWhenPull = postSubscriptionWhenPull;
 	}
 
+	/**
+	 * Returns the max reconsume times.
+	 *
+	 * @return the max reconsume times
+	 */
 	public int getMaxReconsumeTimes() {
 		return maxReconsumeTimes;
 	}
 
+	/**
+	 * Sets the max reconsume times.
+	 *
+	 * @param maxReconsumeTimes the max reconsume times
+	 */
 	public void setMaxReconsumeTimes(int maxReconsumeTimes) {
 		this.maxReconsumeTimes = maxReconsumeTimes;
 	}
 
+	/**
+	 * Returns the suspend current queue time millis.
+	 *
+	 * @return the suspend current queue time millis
+	 */
 	public long getSuspendCurrentQueueTimeMillis() {
 		return suspendCurrentQueueTimeMillis;
 	}
 
+	/**
+	 * Sets the suspend current queue time millis.
+	 *
+	 * @param suspendCurrentQueueTimeMillis the suspend current queue time millis
+	 */
 	public void setSuspendCurrentQueueTimeMillis(long suspendCurrentQueueTimeMillis) {
 		this.suspendCurrentQueueTimeMillis = suspendCurrentQueueTimeMillis;
 	}
 
+	/**
+	 * Returns the consume timeout.
+	 *
+	 * @return the consume timeout
+	 */
 	public long getConsumeTimeout() {
 		return consumeTimeout;
 	}
 
+	/**
+	 * Sets the consume timeout.
+	 *
+	 * @param consumeTimeout the consume timeout
+	 */
 	public void setConsumeTimeout(long consumeTimeout) {
 		this.consumeTimeout = consumeTimeout;
 	}
 	
+	/**
+	 * Returns the retry times when consume failed.
+	 *
+	 * @return the retry times when consume failed
+	 */
 	public int getRetryTimesWhenConsumeFailed() {
 		return retryTimesWhenConsumeFailed;
 	}
 
+	/**
+	 * Sets the retry times when consume failed.
+	 *
+	 * @param retryTimesWhenConsumeFailed the retry times when consume failed
+	 */
 	public void setRetryTimesWhenConsumeFailed(int retryTimesWhenConsumeFailed) {
 		this.retryTimesWhenConsumeFailed = retryTimesWhenConsumeFailed;
 	}
 	
+	/**
+	 * Returns the delay level when next consume.
+	 *
+	 * @return the delay level when next consume
+	 */
 	public int getDelayLevelWhenNextConsume() {
 		return delayLevelWhenNextConsume;
 	}
 
+	/**
+	 * Sets the delay level when next consume.
+	 *
+	 * @param delayLevelWhenNextConsume the delay level when next consume
+	 */
 	public void setDelayLevelWhenNextConsume(int delayLevelWhenNextConsume) {
 		this.delayLevelWhenNextConsume = delayLevelWhenNextConsume;
 	}
 
+	/**
+	 * Returns the delay start seconds.
+	 *
+	 * @return the delay start seconds
+	 */
 	public int getDelayStartSeconds() {
 		return delayStartSeconds;
 	}
 
+	/**
+	 * Sets the delay start seconds.
+	 *
+	 * @param delayStartSeconds the delay start seconds
+	 */
 	public void setDelayStartSeconds(int delayStartSeconds) {
 		this.delayStartSeconds = delayStartSeconds;
 	}
 
+	/**
+	 * Returns the event.
+	 *
+	 * @return the event
+	 */
 	public ZbusConsumerEventProperties getEvent() {
 		return event;
 	}
 
+	/**
+	 * Sets the event.
+	 *
+	 * @param event the event
+	 */
 	public void setEvent(ZbusConsumerEventProperties event) {
 		this.event = event;
 	}

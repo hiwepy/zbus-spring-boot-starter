@@ -14,6 +14,11 @@ import com.lmax.disruptor.EventFactory;
 public class ZbusDisruptorEventFactory implements EventFactory<ZbusDisruptorEvent> {
 
 	@Override
+	/**
+	 * new Instance.
+	 *
+	 * @return the result
+	 */
 	public ZbusDisruptorEvent newInstance() {
 		return new ZbusDisruptorEvent(this);
 	}

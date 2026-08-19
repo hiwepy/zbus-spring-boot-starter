@@ -29,6 +29,12 @@ public abstract class AbstractPathMatchMessageHandler<T extends ZbusEvent> exten
 	protected List<String> appliedPaths = new ArrayList<String>();
 
 	@Override
+	/**
+	 * process Path.
+	 *
+	 * @param path the path
+	 * @return the result
+	 */
 	public EventHandler<T> processPath(String path) {
 		this.appliedPaths.add(path);
 		return this;
@@ -104,14 +110,29 @@ public abstract class AbstractPathMatchMessageHandler<T extends ZbusEvent> exten
 		return isEnabled(event);
 	}
 
+	/**
+	 * Returns the path matcher.
+	 *
+	 * @return the path matcher
+	 */
 	public PathMatcher getPathMatcher() {
 		return pathMatcher;
 	}
 
+	/**
+	 * Sets the path matcher.
+	 *
+	 * @param pathMatcher the path matcher
+	 */
 	public void setPathMatcher(PathMatcher pathMatcher) {
 		this.pathMatcher = pathMatcher;
 	}
 
+	/**
+	 * Returns the applied paths.
+	 *
+	 * @return the applied paths
+	 */
 	public List<String> getAppliedPaths() {
 		return appliedPaths;
 	}

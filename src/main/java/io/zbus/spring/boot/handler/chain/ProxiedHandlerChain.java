@@ -45,6 +45,12 @@ public class ProxiedHandlerChain implements HandlerChain<ZbusEvent> {
     }
 
     @Override
+	/**
+	 * do Handler.
+	 *
+	 * @param event the event
+	 * @throws Exception if an error occurs
+	 */
 	public void doHandler(ZbusEvent event) throws Exception {
         if (this.handlers == null || this.handlers.size() == this.currentPosition) {
             if (LOG.isTraceEnabled()) {

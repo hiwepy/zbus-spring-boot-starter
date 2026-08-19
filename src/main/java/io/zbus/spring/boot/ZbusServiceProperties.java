@@ -62,54 +62,119 @@ public class ZbusServiceProperties {
 		return enabled;
 	}
 
+	/**
+	 * Sets the enabled.
+	 *
+	 * @param enabled the enabled
+	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
+	/**
+	 * Returns the service name.
+	 *
+	 * @return the service name
+	 */
 	public String getServiceName() {
 		return serviceName;
 	}
 
+	/**
+	 * Sets the service name.
+	 *
+	 * @param serviceName the service name
+	 */
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
 
+	/**
+	 * Returns the connection count.
+	 *
+	 * @return the connection count
+	 */
 	public int getConnectionCount() {
 		return connectionCount;
 	}
 
+	/**
+	 * Sets the connection count.
+	 *
+	 * @param connectionCount the connection count
+	 */
 	public void setConnectionCount(int connectionCount) {
 		this.connectionCount = connectionCount;
 	}
 
+	/**
+	 * Returns the response type info.
+	 *
+	 * @return the response type info
+	 */
 	public boolean isResponseTypeInfo() {
 		return responseTypeInfo;
 	}
 
+	/**
+	 * Sets the response type info.
+	 *
+	 * @param responseTypeInfo the response type info
+	 */
 	public void setResponseTypeInfo(boolean responseTypeInfo) {
 		this.responseTypeInfo = responseTypeInfo;
 	}
 
+	/**
+	 * Returns the method page.
+	 *
+	 * @return the method page
+	 */
 	public boolean isMethodPage() {
 		return methodPage;
 	}
 
+	/**
+	 * Sets the method page.
+	 *
+	 * @param methodPage the method page
+	 */
 	public void setMethodPage(boolean methodPage) {
 		this.methodPage = methodPage;
 	}
 
+	/**
+	 * Returns the stack trace.
+	 *
+	 * @return the stack trace
+	 */
 	public boolean isStackTrace() {
 		return stackTrace;
 	}
 
+	/**
+	 * Sets the stack trace.
+	 *
+	 * @param stackTrace the stack trace
+	 */
 	public void setStackTrace(boolean stackTrace) {
 		this.stackTrace = stackTrace;
 	}
 
+	/**
+	 * Returns the declare on missing.
+	 *
+	 * @return the declare on missing
+	 */
 	public boolean isDeclareOnMissing() {
 		return declareOnMissing;
 	}
 
+	/**
+	 * Sets the declare on missing.
+	 *
+	 * @param declareOnMissing the declare on missing
+	 */
 	public void setDeclareOnMissing(boolean declareOnMissing) {
 		this.declareOnMissing = declareOnMissing;
 	}
@@ -118,6 +183,11 @@ public class ZbusServiceProperties {
 		return modules;
 	}
 
+	/**
+	 * Sets the modules.
+	 *
+	 * @param modules the modules
+	 */
 	public void setModules(Map<String, String> modules) {
 		this.modules = modules;
 	}

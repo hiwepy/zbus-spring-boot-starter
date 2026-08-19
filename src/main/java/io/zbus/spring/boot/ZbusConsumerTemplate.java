@@ -38,36 +38,81 @@ public class ZbusConsumerTemplate {
         this.consumer = consumer;
     }
 
+    /**
+     * subscribe.
+     *
+     * @param topic the topic
+     * @param handlerName the handler name
+     * @param handler the handler
+     * @throws ZbusException if an error occurs
+     */
     public void subscribe(String topic, String handlerName, EventHandler<RocketmqEvent> handler) throws ZbusException {
         consumer.subscribe(topic, "");
     }
 
+    /**
+     * unsubscribe.
+     *
+     * @param topic the topic
+     * @param tags the tags
+     * @param handlerName the handler name
+     */
     public void unsubscribe(String topic, String tags, String handlerName) {
         consumer.removeTopic(topic);
         consumer.queryTopic(topic);
         consumer.unsubscribe(topic);
     }
 
+    /**
+     * Returns the message orderly handler.
+     *
+     * @return the message orderly handler
+     */
     public RocketmqEventMessageOrderlyHandler getMessageOrderlyHandler() {
         return messageOrderlyHandler;
     }
 
+    /**
+     * Sets the message orderly handler.
+     *
+     * @param messageOrderlyHandler the message orderly handler
+     */
     public void setMessageOrderlyHandler(RocketmqEventMessageOrderlyHandler messageOrderlyHandler) {
         this.messageOrderlyHandler = messageOrderlyHandler;
     }
 
+    /**
+     * Returns the message concurrently handler.
+     *
+     * @return the message concurrently handler
+     */
     public RocketmqEventMessageConcurrentlyHandler getMessageConcurrentlyHandler() {
         return messageConcurrentlyHandler;
     }
 
+    /**
+     * Sets the message concurrently handler.
+     *
+     * @param messageConcurrentlyHandler the message concurrently handler
+     */
     public void setMessageConcurrentlyHandler(RocketmqEventMessageConcurrentlyHandler messageConcurrentlyHandler) {
         this.messageConcurrentlyHandler = messageConcurrentlyHandler;
     }
 
+    /**
+     * Returns the consumer.
+     *
+     * @return the consumer
+     */
     public Consumer getConsumer() {
         return consumer;
     }
 
+    /**
+     * Sets the consumer.
+     *
+     * @param consumer the consumer
+     */
     public void setConsumer(Consumer consumer) {
         this.consumer = consumer;
     }

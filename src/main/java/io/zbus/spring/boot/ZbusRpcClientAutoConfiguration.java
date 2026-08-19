@@ -36,6 +36,12 @@ public class ZbusRpcClientAutoConfiguration implements ApplicationContextAware {
 
     @Bean
     @ConditionalOnMissingBean
+    /**
+     * client Bootstrap.
+     *
+     * @return the result
+     * @throws Exception if an error occurs
+     */
     public SpringClientBootstrap clientBootstrap() throws Exception {
         SpringClientBootstrap b = new SpringClientBootstrap();
         b.serviceAddress("localhost:15555")
@@ -45,15 +51,33 @@ public class ZbusRpcClientAutoConfiguration implements ApplicationContextAware {
 
     @Bean
     @ConditionalOnMissingBean
+    /**
+     * RPC Invoker.
+     *
+     * @param b the b
+     * @return the result
+     * @throws Exception if an error occurs
+     */
     public RpcInvoker rpcInvoker(ClientBootstrap b) throws Exception {
         return b.invoker();
     }
 
     @Override
+    /**
+     * Sets the application context.
+     *
+     * @param applicationContext the application context
+     * @throws BeansException if an error occurs
+     */
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * Returns the application context.
+     *
+     * @return the application context
+     */
     public ApplicationContext getApplicationContext() {
         return applicationContext;
     }

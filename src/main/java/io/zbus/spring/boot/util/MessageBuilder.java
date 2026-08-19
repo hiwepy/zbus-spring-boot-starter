@@ -61,6 +61,11 @@ public class MessageBuilder implements Builder<Message> {
     }
 
     @Override
+    /**
+     * build.
+     *
+     * @return the result
+     */
     public Message build() {
         if (StringUtils.isEmpty(topic)) {
             throw new MessageBuildException("topic is empty");

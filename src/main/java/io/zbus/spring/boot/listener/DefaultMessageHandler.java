@@ -46,6 +46,11 @@ public class DefaultMessageHandler implements MessageHandler, ApplicationContext
 	private ApplicationContext applicationContext;
 
 	@Override
+	/**
+	 * after Properties Set.
+	 *
+	 * @throws Exception if an error occurs
+	 */
 	public void afterPropertiesSet() throws Exception {
 
 		List<ZbusMessageHandler> handlers = new ArrayList<ZbusMessageHandler>();
@@ -69,6 +74,13 @@ public class DefaultMessageHandler implements MessageHandler, ApplicationContext
 	}
 
 	@Override
+	/**
+	 * handle.
+	 *
+	 * @param msgExt the msg ext
+	 * @param client the client
+	 * @throws IOException if an error occurs
+	 */
 	public void handle(Message msgExt, MqClient client) throws IOException {
 		// Consume the message.
 		LOG.debug("Receive msg: {}", msgExt);
@@ -132,27 +144,58 @@ public class DefaultMessageHandler implements MessageHandler, ApplicationContext
 		}
 	}
 
+	/**
+	 * Returns the message handler.
+	 *
+	 * @return the message handler
+	 */
 	public ZbusMessageHandler getMessageHandler() {
 		return messageHandler;
 	}
 
+	/**
+	 * Sets the message handler.
+	 *
+	 * @param messageHandler the message handler
+	 */
 	public void setMessageHandler(ZbusMessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
 	}
 	
+	/**
+	 * Returns the properties.
+	 *
+	 * @return the properties
+	 */
 	public ZbusConsumerProperties getProperties() {
 		return properties;
 	}
 
+	/**
+	 * Sets the properties.
+	 *
+	 * @param properties the properties
+	 */
 	public void setProperties(ZbusConsumerProperties properties) {
 		this.properties = properties;
 	}
 	
 	@Override
+	/**
+	 * Sets the application context.
+	 *
+	 * @param applicationContext the application context
+	 * @throws BeansException if an error occurs
+	 */
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
 
+	/**
+	 * Returns the application context.
+	 *
+	 * @return the application context
+	 */
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
 	}

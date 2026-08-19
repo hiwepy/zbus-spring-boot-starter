@@ -24,6 +24,10 @@ public class ZbusConsumerShutdownHook extends Thread{
 	}
 
 	@Override
+	/**
+	 * run.
+	 *
+	 */
 	public void run() {
 		try {
 			consumer.close();

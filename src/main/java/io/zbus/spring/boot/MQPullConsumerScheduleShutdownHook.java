@@ -2,6 +2,8 @@ package io.zbus.spring.boot;
 
 /**
  * Stub for MQPullConsumerScheduleShutdownHook.
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 public class MQPullConsumerScheduleShutdownHook extends Thread {
 
@@ -12,6 +14,10 @@ public class MQPullConsumerScheduleShutdownHook extends Thread {
     }
 
     @Override
+    /**
+     * run.
+     *
+     */
     public void run() {
         service.shutdown();
     }

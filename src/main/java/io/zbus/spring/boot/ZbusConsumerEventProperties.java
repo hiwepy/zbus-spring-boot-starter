@@ -33,6 +33,11 @@ public class ZbusConsumerEventProperties {
 		return definitions;
 	}
 
+	/**
+	 * Sets the definitions.
+	 *
+	 * @param definitions the definitions
+	 */
 	public void setDefinitions(String definitions) {
 		this.definitions = definitions;
 	}
@@ -41,6 +46,11 @@ public class ZbusConsumerEventProperties {
 		return definitionMap;
 	}
 
+	/**
+	 * Sets the definition map.
+	 *
+	 * @param definitionMap the definition map
+	 */
 	public void setDefinitionMap(Map<String, String> definitionMap) {
 		this.definitionMap = definitionMap;
 	}

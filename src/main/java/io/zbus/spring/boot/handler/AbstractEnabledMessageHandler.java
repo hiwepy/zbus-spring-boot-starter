@@ -30,6 +30,13 @@ public abstract class AbstractEnabledMessageHandler<T extends ZbusEvent> extends
 	protected abstract void doHandlerInternal(T event, HandlerChain<T> handlerChain) throws Exception;
 
 	@Override
+	/**
+	 * do Handler.
+	 *
+	 * @param event the event
+	 * @param handlerChain the handler chain
+	 * @throws Exception if an error occurs
+	 */
 	public void doHandler(T event, HandlerChain<T> handlerChain) throws Exception {
 
 		if (!isEnabled(event)) {

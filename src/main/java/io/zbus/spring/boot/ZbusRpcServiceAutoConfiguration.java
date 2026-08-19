@@ -32,6 +32,13 @@ public class ZbusRpcServiceAutoConfiguration implements ApplicationContextAware 
 
     @Bean
     @ConditionalOnMissingBean
+    /**
+     * service Bootstrap.
+     *
+     * @param properties the properties
+     * @return the result
+     * @throws Exception if an error occurs
+     */
     public ServiceBootstrap serviceBootstrap(ZbusServiceProperties properties) throws Exception {
         ServiceBootstrap bootstrap = new ServiceBootstrap();
         if (properties.getServiceName() != null) {
@@ -42,10 +49,21 @@ public class ZbusRpcServiceAutoConfiguration implements ApplicationContextAware 
     }
 
     @Override
+    /**
+     * Sets the application context.
+     *
+     * @param applicationContext the application context
+     * @throws BeansException if an error occurs
+     */
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * Returns the application context.
+     *
+     * @return the application context
+     */
     public ApplicationContext getApplicationContext() {
         return applicationContext;
     }
